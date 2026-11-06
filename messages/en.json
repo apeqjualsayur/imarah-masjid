@@ -1,0 +1,39 @@
+{
+  "app": {
+    "name": "Imarah",
+    "tagline": "Masjid and Surau Management System",
+    "credit": "Powered by Imarah"
+  },
+  "sample": {
+    "masjidName": "Masjid Al-Hidayah",
+    "masjidArea": "Taman Seri Murni"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "utama": "Home",
+    "kewangan": "Finance",
+    "kariah": "Kariah",
+    "khairat": "Khairat",
+    "laporan": "Reports",
+    "tetapan": "Settings",
+    "lagi": "More"
+  },
+  "prayer": {
+    "label": "Prayer times",
+    "subuh": "Fajr",
+    "zohor": "Dhuhr",
+    "asar": "Asr",
+    "maghrib": "Maghrib",
+    "isyak": "Isha"
+  },
+  "language": {
+    "label": "Language",
+    "ms": "BM",
+    "en": "EN",
+    "msFull": "Bahasa Malaysia",
+    "enFull": "English"
+  },
+  "placeholder": {
+    "body": "This screen will be built in a later step."
+  }
+}

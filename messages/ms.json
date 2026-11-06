@@ -1,0 +1,39 @@
+{
+  "app": {
+    "name": "Imarah",
+    "tagline": "Sistem Pengurusan Masjid dan Surau",
+    "credit": "Dikuasakan oleh Imarah"
+  },
+  "sample": {
+    "masjidName": "Masjid Al-Hidayah",
+    "masjidArea": "Taman Seri Murni"
+  },
+  "nav": {
+    "label": "Navigasi utama",
+    "utama": "Utama",
+    "kewangan": "Kewangan",
+    "kariah": "Kariah",
+    "khairat": "Khairat",
+    "laporan": "Laporan",
+    "tetapan": "Tetapan",
+    "lagi": "Lagi"
+  },
+  "prayer": {
+    "label": "Waktu solat",
+    "subuh": "Subuh",
+    "zohor": "Zohor",
+    "asar": "Asar",
+    "maghrib": "Maghrib",
+    "isyak": "Isyak"
+  },
+  "language": {
+    "label": "Bahasa",
+    "ms": "BM",
+    "en": "EN",
+    "msFull": "Bahasa Malaysia",
+    "enFull": "English"
+  },
+  "placeholder": {
+    "body": "Skrin ini akan dibina dalam langkah seterusnya."
+  }
+}
