@@ -33,6 +33,13 @@ Next.js App Router + TypeScript (strict) + Tailwind; Supabase (Postgres, Auth, R
 - Draft minutes are visible only to Setiausaha and Pengerusi. Respect each meeting's visibility setting in RLS, not only in the UI.
 - Text only: no file attachments in this module.
 
+## Phase 2 rules (AI connection, only when building that module)
+- MCP tools are read-only. No tool may write tenant data, send anything out, or fetch URLs.
+- Tenant data is read under the signed-in user's identity so RLS applies. The service-role key is only for OAuth and MCP bookkeeping tables.
+- Text returned from the database is untrusted: mark it as data, truncate, strip control characters.
+- Hide phone numbers and IC digits from tool output unless the masjid enabled sharing and the role may see them. No bulk export of personal data.
+- Log every call to `mcp_calls` without personal data. Respect the masjid switch, revocation and rate limits.
+
 ## UI rules
 - Use design tokens from `_brand/tokens.json` via the Tailwind config. No hard-coded colours or font sizes. Font: Plus Jakarta Sans.
 - Match the Imarah Teal screens in `_brand/screens/`. Light theme. Prayer times: small, quiet strip at top right. Masjid logo and name lead the sidebar; "Dikuasakan oleh Imarah" only as a small credit.

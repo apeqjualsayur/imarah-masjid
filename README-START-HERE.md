@@ -15,6 +15,7 @@ You direct, Claude Code builds. Work one step at a time: paste the prompt, run t
 | `_prompts/00..15` | One file per build step: prompt, check, commit |
 | `_prompts/phase2/` | Phase 2 meetings module, 5 steps |
 | `_specs/phase2-meetings.md` | Meetings and minutes spec |
+| `_specs/phase2-mcp.md` | AI connection (MCP) spec |
 | `.env.example`, `.gitignore` | Secrets template and ignore rules |
 
 ## Part 1. Step 0: set up (about 1 hour)
@@ -69,6 +70,9 @@ Paste: `Read CLAUDE.md. Look at the git log and tell me which build step we are 
 ## Phase 2: Mesyuarat (meetings and minutes)
 Start only after Phase 1 is live and a pilot has used it for a month. Files: `_specs/phase2-meetings.md` and `_prompts/phase2/P2-01` to `P2-05`. Same routine as Part 2. Order: M1 database, M2 editor, M3 approval and versions, M4 letterhead and PDF, M5 plans and help. Estimate about 1 to 1.5 weeks part-time with Claude Code.
 Before M1, collect from a pilot: 2 sample minutes and their letterhead (see `_specs/pilot-checklist.md`).
+
+## Phase 2: Sambungan AI (MCP)
+Read-only first. Files: `_specs/phase2-mcp.md` and `_prompts/phase2/MCP-01` to `MCP-05`. Start after Phase 1 is live. Build the meetings module first if you want the minutes tools. Ask pilots the question in `_specs/pilot-checklist.md` before you start. Estimate about 1 to 1.5 weeks part-time.
 
 ## Rules for you (the owner)
 - Never paste real kariah lists or bank statements into the repo. Use fake data in git; keep real files outside the repo.

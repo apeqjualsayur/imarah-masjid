@@ -43,3 +43,14 @@ Rules:
 | Export PDF (approved) | Y | Y | Y | Y | - |
 | Letterhead settings | Y | - | - | - | - |
 | Per-meeting audit timeline | Y | - | Y | - | - |
+
+## Phase 2: AI connection (MCP)
+
+| Capability | Pengerusi | Bendahari | Setiausaha | AJK | Imam |
+|---|---|---|---|---|---|
+| Switch AI connection on or off for the masjid | Y | - | - | - | - |
+| Allow sharing sensitive fields with AI | Y | - | - | - | - |
+| Connect own AI (tools limited to own role) | Y | Y | Y | Y | Y |
+| Revoke own connection | Y | Y | Y | Y | Y |
+| See all connections and the call log | Y | - | - | - | - |
+| Revoke anyone's connection | Y | - | - | - | - |

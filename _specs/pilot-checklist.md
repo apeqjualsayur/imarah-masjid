@@ -16,3 +16,5 @@ Interview questions: How do you record Friday collections today? Who counts and 
 Get written permission to use their documents for building and testing. Keep real documents out of the git repo (store them outside it).
 
 | Two sample minutes of meeting and the masjid's letterhead (Phase 2) | Shapes the Mesyuarat module and PDF | Before Phase 2 |
+
+Phase 2 question (ask after Phase 1 is in use): Would you connect your own AI (for example Claude or ChatGPT) to Imarah, and what would you ask it?

@@ -29,13 +29,14 @@ Online donations, maker-checker approvals, khairat claims workflow, programmes a
 
 ## 4b. Phase 2 order (recommended)
 1. **Mesyuarat** (meetings and minutes), see `_specs/phase2-meetings.md`. First because it needs no outside service, costs almost nothing to host and supports the trust and governance pitch.
-2. Online donations with auto-matching.
-3. Maker-checker approvals.
-4. Khairat claims workflow.
-5. Programmes and events.
-6. Member view with kariah card.
-7. State-specific report templates.
-8. WhatsApp blast add-on.
+2. **Sambungan AI (MCP)**, read-only first, see `_specs/phase2-mcp.md`. Ask pilots first whether they would use it.
+3. Online donations with auto-matching.
+4. Maker-checker approvals.
+5. Khairat claims workflow.
+6. Programmes and events.
+7. Member view with kariah card.
+8. State-specific report templates.
+9. WhatsApp blast add-on.
 Order after item 1 can change with pilot feedback.
 
 ## 5. Data model

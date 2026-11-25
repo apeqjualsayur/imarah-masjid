@@ -28,3 +28,12 @@ Plus: "Apa yang baharu" (release notes), printable PDF manual per role, "Hubungi
 | Tetapan kepala surat (letterhead) | Pengerusi |
 | Menjana PDF minit mesyuarat | Setiausaha, Pengerusi, AJK |
 | Mengemas kini status tindakan | Setiausaha, AJK |
+
+## Phase 2 additions (AI connection)
+| Article | For |
+|---|---|
+| Apa itu Sambungan AI dan data apa yang boleh dilihat | Semua |
+| Menghidupkan Sambungan AI untuk masjid | Pengerusi |
+| Menyambung AI anda (Claude, ChatGPT) | Semua |
+| Contoh soalan yang boleh ditanya | Semua |
+| Memutuskan sambungan dan melihat log | Pengerusi, semua (sambungan sendiri) |
