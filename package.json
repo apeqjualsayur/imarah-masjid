@@ -10,6 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:isolation": "vitest run --config vitest.isolation.config.mts",
+    "db:seed": "tsx scripts/seed.ts",
     "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.65.0",
+    "@supabase/supabase-js": "^2.119.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^24.19.2",
     "@types/react": "^19",
@@ -31,7 +34,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
     "sharp": "^0.35.5",
+    "supabase": "^3.0.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.1.0"
   }
