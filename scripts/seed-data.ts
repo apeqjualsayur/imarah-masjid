@@ -74,6 +74,7 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     address: `${n} Jalan Contoh`,
     phone: `010000000${n}`,
     whatsapp_opt_in: n % 2 === 0,
+    whatsapp_consent_at: n % 2 === 0 ? "2026-01-01T00:00:00Z" : null,
     pdpa_consent_at: "2026-01-01T00:00:00Z",
   }));
 

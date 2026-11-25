@@ -6,6 +6,14 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # What's new
 
+## November 2026: Kariah registry
+
+- **Register households.** The Setiausaha can add households and family members under **Kariah**. Search by name, phone or address.
+- **Import from Excel.** Download the template, fill it in Excel, and import. The preview shows each row's errors before anything is saved.
+- **WhatsApp and PDPA consent** are recorded with their dates.
+- **IC number:** only the last 4 digits are stored.
+- **Change history** for each household (Pengerusi and Bendahari).
+
 ## November 2026: Logo and prayer times
 
 - **Masjid logo.** The Pengerusi can upload a logo (PNG or SVG) under **Settings > Masjid logo**. Without one, the masjid's initials are shown.

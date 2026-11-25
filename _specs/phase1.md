@@ -73,6 +73,14 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - **Yearly task:** run `npm run prayer:fetch-year -- <year>` once JAKIM publishes the new year (2027 was not published on 25 Nov 2026), commit the file and deploy before 1 January.
 - Seed masjids: A in Selangor (SGR01) with a sample logo, B in Pulau Pinang (PNG01) without one, so zones and logos can be told apart.
 
+### Kariah decisions (Step 5)
+- `households.whatsapp_consent_at` added; a check keeps `whatsapp_opt_in` and its date in step. Ticking a consent box records the date; unticking clears it (the audit log keeps the withdrawal).
+- Phones stored as digits with the leading 0 (`lib/phone.ts` repairs +60, spaces, a lost leading 0; refuses Excel's 1.23E+09).
+- IC: last 4 digits only; a full 12-digit IC is cut on the device and again on the server.
+- CSV import: one row per household (`nama_ketua, alamat, telefon, whatsapp, pdpa`); members are added on screen. UTF-8 or Windows-1252, comma or semicolon. Preview checks every row; confirm re-checks the whole file on the server. Duplicate = same phone, or same name and address. "ya" consent records the import date.
+- `checkPlanLimit` in `lib/plan-limits.ts` (Asas: 150 households) is checked by the app on add and import; the database enforces it from Step 13.
+- Household change history (`household_history`) for Pengerusi and Bendahari: who, when, which fields. Personal fields show "changed" only; the log never held their values.
+
 ## 6. Rules that never bend
 1. Money in integer sen.
 2. Transactions never edited or deleted; reversing entry via `reverses_id`.

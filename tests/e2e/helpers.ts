@@ -26,7 +26,8 @@ export async function signIn(page: Page, email: string, password = env.password)
   await page.getByLabel("Emel").first().fill(email);
   await page.getByLabel("Kata laluan").fill(password);
   await page.getByRole("button", { name: "Log masuk", exact: true }).click();
-  await expect(page).not.toHaveURL(/\/log-masuk/);
+  // The first sign-in can wait for the dev server to compile a page.
+  await expect(page).not.toHaveURL(/\/log-masuk/, { timeout: 20_000 });
 }
 
 export function mainNav(page: Page) {

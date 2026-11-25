@@ -6,6 +6,14 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: Daftar kariah
+
+- **Daftar isi rumah.** Setiausaha boleh menambah isi rumah dan ahli keluarga di **Kariah**. Cari mengikut nama, telefon atau alamat.
+- **Import dari Excel.** Muat turun templat, isi dalam Excel, dan import. Pratonton menunjukkan ralat setiap baris sebelum apa-apa disimpan.
+- **Persetujuan WhatsApp dan PDPA** direkodkan dengan tarikh.
+- **No. KP:** hanya 4 digit terakhir disimpan.
+- **Sejarah perubahan** untuk setiap isi rumah (Pengerusi dan Bendahari).
+
 ## November 2026: Logo dan waktu solat
 
 - **Logo masjid.** Pengerusi boleh memuat naik logo (PNG atau SVG) di **Tetapan > Logo masjid**. Tanpa logo, inisial nama masjid dipaparkan.
