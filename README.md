@@ -26,6 +26,7 @@ The app needs the three Supabase values to run. In Supabase, add `http://localho
 | `npm run db:seed` | Fake masjids, users and data in the dev database |
 | `npm run test:isolation` | Database security tests against the dev database |
 | `npm run admin:create -- email` | Make a platform admin account |
+| `npm run prayer:fetch-year -- 2027` | Bundle a year of prayer times for every zone (run when JAKIM publishes it) |
 
 ## Checks
 

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { loadDevEnv } from "../../scripts/db-env";
 
 export const env = loadDevEnv();
+export { createClient };
 export const admin = createClient(env.url, env.serviceKey, {
   auth: { persistSession: false, autoRefreshToken: false },
 });

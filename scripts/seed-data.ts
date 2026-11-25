@@ -25,6 +25,16 @@ export const seedRoles: Record<MasjidKey, Role[]> = {
 
 export const seedEmail = (masjid: MasjidKey, role: Role) => `${role}.${masjid}@imarah.test`;
 
+const roleNames: Record<Role, string> = {
+  pengerusi: "Pengerusi",
+  bendahari: "Bendahari",
+  setiausaha: "Setiausaha",
+  ajk: "AJK",
+  imam: "Imam",
+};
+/** "Bendahari Contoh A": fake, but reads like a name in the app. */
+export const seedUserName = (masjid: MasjidKey, role: Role) => `${roleNames[role]} Contoh ${masjid.toUpperCase()}`;
+
 /** Each masjid has one open invitation. Tests know its link token. */
 export const seedInviteToken = (masjid: MasjidKey) => `seed-invite-${masjid}`;
 export const seedInviteEmail = (masjid: MasjidKey) => `jemputan.${masjid}@imarah.test`;
@@ -167,14 +177,31 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
   ];
 }
 
+// Two zones with clearly different times, so tests can tell them apart.
+const masjidPlaces = {
+  a: { state: "Selangor", address: "Taman Contoh A, 40000 Shah Alam", prayer_zone: "SGR01" },
+  b: { state: "Pulau Pinang", address: "Kampung Contoh B, 10000 George Town", prayer_zone: "PNG01" },
+};
+
 export function seedMasjid(masjid: MasjidKey): Row {
   return {
     id: masjidId(masjid),
     name: masjidNames[masjid],
-    state: "Selangor",
     plan: "standard",
+    ...masjidPlaces[masjid],
   };
 }
+
+/** Masjid A gets a sample logo; B keeps initials. */
+export const seedLogoPath = (masjid: MasjidKey) => `masjids/${masjidId(masjid)}/logo-contoh.svg`;
+export const SEED_LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+<circle cx="48" cy="48" r="48" fill="#0F766E"/>
+<path d="M26 66V52a22 22 0 0 1 44 0v14H56V56a8 8 0 0 0-16 0v10z" fill="#FFFFFF"/>
+<path d="M18 66V42l3-6 3 6v24zM72 66V42l3-6 3 6v24z" fill="#FFFFFF"/>
+<rect x="16" y="68" width="64" height="5" rx="2" fill="#F6E3B8"/>
+<circle cx="48" cy="23" r="5" fill="#F6E3B8"/>
+</svg>
+`;
 
 export const firstRowId = (masjid: MasjidKey, table: string) => {
   const tableNumbers: Record<string, number> = {

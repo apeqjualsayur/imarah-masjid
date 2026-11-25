@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
+import { LOGO_BUCKET, LOGO_LINK_SECONDS } from "@/lib/logo";
 import { can, isRole, type Capability, type Role } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 
@@ -11,7 +12,15 @@ export type MasjidSummary = {
   state: string | null;
   address: string | null;
   plan: string;
+  logo_path: string | null;
+  prayer_zone: string | null;
 };
+
+/** The short place line under the masjid name: the address's first line, else the state. */
+export function areaLine(masjid: MasjidSummary) {
+  const firstLine = masjid.address?.split(/\r?\n|,/)[0]?.trim();
+  return firstLine || masjid.state || "";
+}
 
 export type MemberContext = {
   user: User;
@@ -54,12 +63,23 @@ export const getMembership = cache(async (): Promise<Omit<MemberContext, "user">
 
   const { data: masjid } = await supabase
     .from("masjids")
-    .select("id, name, state, address, plan")
+    .select("id, name, state, address, plan, logo_path, prayer_zone")
     .eq("id", membership.masjid_id)
     .single();
   if (!masjid) return null;
 
   return { role: membership.role, masjid };
+});
+
+/**
+ * A one-hour signed link to the member's own masjid logo, made as the user so
+ * Storage rules apply. Null when there is no logo or it cannot be read.
+ */
+export const getLogoUrl = cache(async (logoPath: string | null): Promise<string | null> => {
+  if (!logoPath) return null;
+  const supabase = await createClient();
+  const { data } = await supabase.storage.from(LOGO_BUCKET).createSignedUrl(logoPath, LOGO_LINK_SECONDS);
+  return data?.signedUrl ?? null;
 });
 
 /**

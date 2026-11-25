@@ -13,6 +13,7 @@
     "test:isolation": "vitest run --config vitest.isolation.config.mts",
     "db:seed": "tsx scripts/seed.ts",
     "admin:create": "tsx scripts/create-admin.ts",
+    "prayer:fetch-year": "tsx scripts/fetch-prayer-year.ts",
     "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {

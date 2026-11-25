@@ -4,10 +4,13 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { loadDevEnv } from "./db-env";
 import {
   masjidId,
+  SEED_LOGO_SVG,
   seedEmail,
+  seedLogoPath,
   seedMasjid,
   seedRoles,
   seedRows,
+  seedUserName,
   type MasjidKey,
   type Role,
   type Row,
@@ -37,15 +40,34 @@ async function ensureUsers(masjid: MasjidKey, known: Map<string, string>) {
     const email = seedEmail(masjid, role);
     let id = known.get(email);
 
+    const fullName = seedUserName(masjid, role);
     if (!id) {
-      const { data, error } = await admin.auth.admin.createUser({ email, password, email_confirm: true });
+      const { data, error } = await admin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { full_name: fullName },
+      });
       if (error) throw new Error(`${email}: ${error.message}`);
       id = data.user.id;
+    } else {
+      await admin.auth.admin.updateUserById(id, { user_metadata: { full_name: fullName } });
     }
     users[role] = id;
   }
 
   return users;
+}
+
+async function ensureLogo(masjid: MasjidKey) {
+  const path = seedLogoPath(masjid);
+  const { error } = await admin.storage
+    .from("masjid-logos")
+    .upload(path, new TextEncoder().encode(SEED_LOGO_SVG), { contentType: "image/svg+xml", upsert: true });
+  if (error) throw new Error(`logo: ${error.message}`);
+  const { error: updateError } = await admin.from("masjids").update({ logo_path: path }).eq("id", masjidId(masjid));
+  if (updateError) throw new Error(`logo: ${updateError.message}`);
+  console.log("logo: uploaded");
 }
 
 async function main() {
@@ -55,7 +77,15 @@ async function main() {
 
   for (const masjid of ["a", "b"] as const) {
     console.log(`\n${masjidId(masjid)}`);
-    await insertMissing(admin, "masjids", [seedMasjid(masjid)]);
+    const profile = seedMasjid(masjid);
+    await insertMissing(admin, "masjids", [profile]);
+    // Keep the place and zone current on masjids seeded before they existed.
+    const { error: profileError } = await admin
+      .from("masjids")
+      .update({ state: profile.state, address: profile.address, prayer_zone: profile.prayer_zone })
+      .eq("id", profile.id);
+    if (profileError) throw new Error(`masjids: ${profileError.message}`);
+    if (masjid === "a") await ensureLogo(masjid);
 
     const users = await ensureUsers(masjid, known);
     for (const [table, rows] of seedRows(masjid, users)) {

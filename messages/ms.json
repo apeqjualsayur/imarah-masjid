@@ -20,7 +20,8 @@
     "zohor": "Zohor",
     "asar": "Asar",
     "maghrib": "Maghrib",
-    "isyak": "Isyak"
+    "isyak": "Isyak",
+    "next": "waktu seterusnya"
   },
   "language": {
     "label": "Bahasa",
@@ -124,7 +125,9 @@
     "role": "Peranan",
     "users": "Pengguna",
     "usersLead": "Jemput AJK, tukar peranan, nyahaktif akaun",
-    "changePassword": "Tukar kata laluan"
+    "changePassword": "Tukar kata laluan",
+    "logo": "Logo masjid",
+    "logoLead": "Muat naik logo untuk sidebar, e-resit dan laporan"
   },
   "users": {
     "back": "Tetapan",
@@ -220,6 +223,34 @@
     "masjid_not_found": "Masjid tidak dijumpai.",
     "name_required": "Sila isi nama masjid.",
     "last_pengerusi": "Masjid mesti ada sekurang-kurangnya seorang Pengerusi aktif.",
-    "bad_code": "Kod tidak betul. Cuba kod terbaharu dari aplikasi anda."
+    "bad_code": "Kod tidak betul. Cuba kod terbaharu dari aplikasi anda.",
+    "logo_empty": "Sila pilih fail logo.",
+    "logo_too_big": "Fail ini lebih besar daripada 1 MB. Sila kecilkan dahulu.",
+    "logo_wrong_type": "Hanya fail PNG atau SVG diterima.",
+    "logo_unsafe_svg": "Fail SVG ini mengandungi kod yang tidak dibenarkan. Sila eksport semula sebagai SVG biasa atau PNG."
+  },
+  "shell": {
+    "greeting": "Salam, {name}"
+  },
+  "logo": {
+    "back": "Tetapan",
+    "title": "Logo masjid",
+    "lead": "Logo dipaparkan di sidebar dan aplikasi, dan kemudian pada e-resit, kad kariah dan laporan bulanan.",
+    "preview": "Pratonton",
+    "circle": "Bulat",
+    "square": "Segi empat",
+    "small": "Saiz sidebar",
+    "noLogo": "Belum ada logo. Inisial nama masjid dipaparkan buat masa ini.",
+    "uploadTitle": "Muat naik logo",
+    "replaceTitle": "Tukar logo",
+    "file": "Fail logo",
+    "fileHint": "PNG atau SVG, maksimum 1 MB. Logo berbentuk segi empat sama paling sesuai.",
+    "upload": "Muat naik",
+    "uploading": "Sedang memuat naik…",
+    "remove": "Buang logo",
+    "removing": "Sedang membuang…",
+    "confirmRemove": "Buang logo ini? Inisial nama masjid akan dipaparkan sebagai ganti.",
+    "uploaded": "Logo telah dikemas kini.",
+    "removed": "Logo telah dibuang."
   }
 }

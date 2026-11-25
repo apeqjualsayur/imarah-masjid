@@ -20,7 +20,8 @@
     "zohor": "Dhuhr",
     "asar": "Asr",
     "maghrib": "Maghrib",
-    "isyak": "Isha"
+    "isyak": "Isha",
+    "next": "next prayer"
   },
   "language": {
     "label": "Language",
@@ -124,7 +125,9 @@
     "role": "Role",
     "users": "Users",
     "usersLead": "Invite committee members, change roles, deactivate accounts",
-    "changePassword": "Change password"
+    "changePassword": "Change password",
+    "logo": "Masjid logo",
+    "logoLead": "Upload a logo for the sidebar, e-receipts and reports"
   },
   "users": {
     "back": "Settings",
@@ -220,6 +223,34 @@
     "masjid_not_found": "Masjid not found.",
     "name_required": "Please fill in the masjid name.",
     "last_pengerusi": "The masjid must keep at least one active Pengerusi.",
-    "bad_code": "That code is not correct. Try the latest code from your app."
+    "bad_code": "That code is not correct. Try the latest code from your app.",
+    "logo_empty": "Please choose a logo file.",
+    "logo_too_big": "This file is larger than 1 MB. Please make it smaller first.",
+    "logo_wrong_type": "Only PNG or SVG files are accepted.",
+    "logo_unsafe_svg": "This SVG contains code that is not allowed. Please export it again as a plain SVG or as a PNG."
+  },
+  "shell": {
+    "greeting": "Salam, {name}"
+  },
+  "logo": {
+    "back": "Settings",
+    "title": "Masjid logo",
+    "lead": "The logo shows in the sidebar and app, and later on e-receipts, kariah cards and monthly reports.",
+    "preview": "Preview",
+    "circle": "Circle",
+    "square": "Square",
+    "small": "Sidebar size",
+    "noLogo": "No logo yet. The masjid's initials are shown for now.",
+    "uploadTitle": "Upload a logo",
+    "replaceTitle": "Change the logo",
+    "file": "Logo file",
+    "fileHint": "PNG or SVG, up to 1 MB. A square logo works best.",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "remove": "Remove logo",
+    "removing": "Removing…",
+    "confirmRemove": "Remove this logo? The masjid's initials will show instead.",
+    "uploaded": "The logo is updated.",
+    "removed": "The logo is removed."
   }
 }

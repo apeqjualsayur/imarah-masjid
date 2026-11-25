@@ -232,7 +232,6 @@ describe("the platform admin", () => {
     });
     expect(verifyError).toBeNull();
 
-    const started = new Date().toISOString();
     const { data: list, error } = await user.client.rpc("admin_list_masjids");
     expect(error).toBeNull();
     expect((list as { id: string }[]).some((row) => row.id === MASJID_A)).toBe(true);
@@ -242,12 +241,12 @@ describe("the platform admin", () => {
     expect((await admin.from("masjids").select("plan").eq("id", MASJID_A).single()).data?.plan).toBe("pro");
     await user.client.rpc("admin_set_plan", { p_masjid_id: MASJID_A, p_plan: before!.plan });
 
+    // The admin account is new in every run, so all its log rows are from this test.
     const { data: log } = await admin
       .from("audit_log")
       .select("action")
       .eq("masjid_id", MASJID_A)
-      .eq("user_id", user.id)
-      .gte("at", started);
+      .eq("user_id", user.id);
     const actions = log?.map((row) => row.action);
     expect(actions).toContain("VIEW");
     expect(actions).toContain("UPDATE");

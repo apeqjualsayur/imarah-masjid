@@ -21,6 +21,9 @@ export default defineConfig({
   ],
   webServer: {
     command: `npx next dev -p ${PORT}`,
+    // The prayer feed is blocked in browser tests, so they prove the page
+    // still works and falls back to the bundled times.
+    env: { PRAYER_API_URL: "http://127.0.0.1:9" },
     url: `http://localhost:${PORT}`,
     reuseExistingServer: false,
     timeout: 120_000,

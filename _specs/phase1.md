@@ -67,6 +67,12 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - A removed member can only be invited back to the same masjid (one membership per user, kept for history). Joining another masjid needs a different email.
 - Platform admin: an account with `app_metadata.platform_admin = true` (set only with the service key, via `npm run admin:create`). Must pass 2-step verification (authenticator app) every session, can never hold a masjid membership, signs in at `/pentadbir/log-masuk`. Can list masjids and set the plan only. Every list view and plan change is written to that masjid's own audit log (action `VIEW` or `UPDATE`), visible to its Pengerusi.
 
+### Logo and prayer-time decisions (Step 4)
+- Logos: private Storage bucket `masjid-logos`, files at `masjids/<masjid_id>/logo-<time>.<png|svg>`, max 1 MB, PNG or SVG (checked by the file's bytes; SVGs with scripts, event handlers or outside links are refused). Members read their own folder; only the Pengerusi writes. Shown through one-hour signed links made on the server. `masjids.logo_path` must point inside the masjid's own folder (database check).
+- Prayer times: `lib/prayer-times.ts` only. api.waktusolat.app month by zone, cached 12 hours on the server -> bundled `data/prayer-times/<year>.json` (all JAKIM zones) -> strip hidden. Strict checks; times are never guessed. Shown: Subuh, Zohor, Asar, Maghrib, Isyak (Syuruk left out, as on the designs). Next prayer highlighted; after Isyak the strip shows tomorrow.
+- **Yearly task:** run `npm run prayer:fetch-year -- <year>` once JAKIM publishes the new year (2027 was not published on 25 Nov 2026), commit the file and deploy before 1 January.
+- Seed masjids: A in Selangor (SGR01) with a sample logo, B in Pulau Pinang (PNG01) without one, so zones and logos can be told apart.
+
 ## 6. Rules that never bend
 1. Money in integer sen.
 2. Transactions never edited or deleted; reversing entry via `reverses_id`.
@@ -83,7 +89,7 @@ See `_specs/roles-permissions.md`.
 Max 3 users, 150 households, 2 funds, monthly PDF only, Imarah footer on outputs. Enforced in the database and shown in the UI with a clear message.
 
 ## 9. Open items (do not block the build)
-Exact report formats per state; collection permit rules; whether a masjid may pay a software fee from kariah funds; PDPA and hosting abroad (Singapore); JAKIM prayer-time data terms; terms of service; SSM entity; service tax on subscription.
+Terms of use for JAKIM prayer-time data and api.waktusolat.app (check before launch); exact report formats per state; collection permit rules; whether a masjid may pay a software fee from kariah funds; PDPA and hosting abroad (Singapore); JAKIM prayer-time data terms; terms of service; SSM entity; service tax on subscription.
 
 ## 10. Done means
 Pilot success measures: treasurer closes one full month; Friday collection recorded in under 3 minutes; Pengerusi can find who changed a figure and when; treasurer names a price they would pay.
