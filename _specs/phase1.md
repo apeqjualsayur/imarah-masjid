@@ -59,6 +59,14 @@ Every table except `masjids` has `masjid_id` and RLS limiting rows to the caller
 
 Also: `receipt_counters` (masjid_id, year, last_no) for gapless receipt numbers, and `reports` (masjid_id, type, period, storage_path, generated_by, at).
 
+Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, expires_at, accepted_at, accepted_by, revoked_at). Only a hash of the link token is stored; links last 7 days; one open invitation per email per masjid.
+
+### Sign-in and access decisions (Step 3)
+- Sign-in: email and password, or a magic link for existing accounts. New masjids start from self sign-up (email confirmation), then onboarding creates the masjid and makes the creator its Pengerusi.
+- Invitations: the Pengerusi gets a copy-link (and WhatsApp share). Email through Resend is sent when `RESEND_API_KEY` is set. The invitee sets a name and password on the link page; the link only works for the invited email.
+- A removed member can only be invited back to the same masjid (one membership per user, kept for history). Joining another masjid needs a different email.
+- Platform admin: an account with `app_metadata.platform_admin = true` (set only with the service key, via `npm run admin:create`). Must pass 2-step verification (authenticator app) every session, can never hold a masjid membership, signs in at `/pentadbir/log-masuk`. Can list masjids and set the plan only. Every list view and plan change is written to that masjid's own audit log (action `VIEW` or `UPDATE`), visible to its Pengerusi.
+
 ## 6. Rules that never bend
 1. Money in integer sen.
 2. Transactions never edited or deleted; reversing entry via `reverses_id`.

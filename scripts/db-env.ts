@@ -2,6 +2,22 @@
 const FORBIDDEN_PROJECT_PREFIX = "fiensjdq";
 
 /**
+ * Loads .env.local for admin scripts that may run against any Imarah
+ * database, dev or production. Still refuses masjidview.my's database.
+ */
+export function loadServerEnv() {
+  process.loadEnvFile(".env.local");
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) throw new Error("Missing Supabase values in .env.local");
+  if (url.includes(FORBIDDEN_PROJECT_PREFIX)) {
+    throw new Error("Refusing to run: this is the masjidview.my database");
+  }
+  return { url, serviceKey };
+}
+
+/**
  * Loads .env.local for the seed script and isolation tests. They write fake
  * data, so they refuse to run against anything not marked as the dev database.
  */

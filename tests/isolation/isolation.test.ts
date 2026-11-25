@@ -15,6 +15,7 @@ const patches: Record<string, Row> = {
   collections: { total_sen: 1 },
   funds: { name: "dicerobohi" },
   households: { head_name: "dicerobohi" },
+  invitations: { revoked_at: "2026-10-20T00:00:00Z" },
   khairat_members: { paid_sen: 1 },
   khairat_plans: { fee_sen: 1 },
   masjids: { name: "dicerobohi" },

@@ -13,13 +13,19 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3009. (Port 3009, because 3000 is often taken by another project.)
 
 ## Environment variables
 
 Copy `.env.example` to `.env.local` and fill in the values. `.env.local` is git-ignored: never commit it. If you add a new variable, add its name to `.env.example` too.
 
-The app runs without any of these for now. Supabase and the other services are connected in later steps.
+The app needs the three Supabase values to run. In Supabase, add `http://localhost:3009/**` under Authentication → URL Configuration → Redirect URLs, or email links will not open the app.
+
+| Command | What it does |
+|---|---|
+| `npm run db:seed` | Fake masjids, users and data in the dev database |
+| `npm run test:isolation` | Database security tests against the dev database |
+| `npm run admin:create -- email` | Make a platform admin account |
 
 ## Checks
 

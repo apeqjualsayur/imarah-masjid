@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/test";
+import { seedEmail } from "../../scripts/seed-data";
+import { mainNav, signIn } from "./helpers";
+
+test.beforeEach(async ({ page }) => {
+  await signIn(page, seedEmail("a", "pengerusi"));
+});
 
 test("shows the right navigation for the screen width", async ({ page, isMobile }) => {
   await page.goto("/");
 
-  const nav = page.getByRole("navigation", { name: "Navigasi utama" });
+  const nav = mainNav(page);
   await expect(nav.getByRole("link", { name: "Kewangan" })).toBeVisible();
   await expect(nav.getByRole("link", { name: isMobile ? "Lagi" : "Tetapan" })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Utama" })).toHaveAttribute("aria-current", "page");

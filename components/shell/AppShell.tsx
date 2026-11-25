@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { Role } from "@/lib/permissions";
+import { SignOutButton } from "@/components/SignOutButton";
 import { BottomTabs } from "./BottomTabs";
 import { FooterCredit } from "./FooterCredit";
 import { LanguageToggle } from "./LanguageToggle";
@@ -6,12 +8,19 @@ import { MobileHeader } from "./MobileHeader";
 import { PrayerStrip } from "./PrayerStrip";
 import { Sidebar } from "./Sidebar";
 
-export function AppShell({ children }: { children: ReactNode }) {
+type Props = {
+  children: ReactNode;
+  masjidName: string;
+  masjidArea: string;
+  role: Role;
+};
+
+export function AppShell({ children, masjidName, masjidArea, role }: Props) {
   return (
     <div className="min-h-dvh md:flex">
-      <Sidebar />
+      <Sidebar masjidName={masjidName} masjidArea={masjidArea} role={role} signOut={<SignOutButton />} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileHeader />
+        <MobileHeader masjidName={masjidName} masjidArea={masjidArea} />
         <div className="hidden flex-wrap items-center justify-end gap-x-4 gap-y-2 px-9 pt-5 md:flex">
           <PrayerStrip variant="strip" />
           <LanguageToggle />
@@ -21,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <FooterCredit />
         </div>
       </div>
-      <BottomTabs />
+      <BottomTabs role={role} />
     </div>
   );
 }

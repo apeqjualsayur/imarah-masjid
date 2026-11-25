@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { isActive, moreItems, tabItems } from "./nav";
+import type { Role } from "@/lib/permissions";
+import { allowedItems, isActive, moreItems, tabItems } from "./nav";
 
-export function BottomTabs() {
+export function BottomTabs({ role }: { role: Role }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const inMore = moreItems.some(({ href }) => isActive(pathname, href));
@@ -15,8 +16,8 @@ export function BottomTabs() {
       aria-label={t("label")}
       className="fixed inset-x-0 bottom-0 border-t border-rule bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
     >
-      <ul className="grid grid-cols-5">
-        {tabItems.map(({ key, href, icon: Icon }) => {
+      <ul className="grid auto-cols-fr grid-flow-col">
+        {allowedItems(tabItems, role).map(({ key, href, icon: Icon }) => {
           const active = isActive(pathname, href) || (key === "lagi" && inMore);
           return (
             <li key={key}>

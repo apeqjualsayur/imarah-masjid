@@ -25,6 +25,22 @@ export function userClient(masjid: MasjidKey, role: Role) {
   return signedIn.get(email)!;
 }
 
+/**
+ * A brand-new confirmed account with no masjid, signed in. Each test run makes
+ * fresh ones, because accounts with memberships can never be deleted.
+ */
+export async function newUser(appMetadata: Record<string, unknown> = {}) {
+  const email = `uji-${crypto.randomUUID()}@imarah.test`;
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password: env.password,
+    email_confirm: true,
+    app_metadata: appMetadata,
+  });
+  if (error) throw new Error(error.message);
+  return { id: data.user.id, email, client: await signIn(email) };
+}
+
 export async function userId(masjid: MasjidKey, role: Role) {
   const client = await userClient(masjid, role);
   const { data } = await client.auth.getUser();
@@ -39,6 +55,7 @@ export const TABLES = [
   "collections",
   "funds",
   "households",
+  "invitations",
   "khairat_members",
   "khairat_plans",
   "masjids",

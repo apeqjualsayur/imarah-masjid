@@ -4,7 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { SerwistProvider } from "@serwist/turbopack/react";
 import tokens from "@/_brand/tokens.json";
-import { AppShell } from "@/components/shell/AppShell";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -40,9 +39,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           disable={process.env.NODE_ENV !== "production"}
           cacheOnNavigation={false}
         >
-          <NextIntlClientProvider>
-            <AppShell>{children}</AppShell>
-          </NextIntlClientProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </SerwistProvider>
       </body>
     </html>

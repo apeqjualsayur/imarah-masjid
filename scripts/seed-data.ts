@@ -1,4 +1,5 @@
 // Fake data only. Never put real kariah or bank details here.
+import { createHash } from "node:crypto";
 
 export type MasjidKey = "a" | "b";
 export type Role = "pengerusi" | "bendahari" | "setiausaha" | "ajk" | "imam";
@@ -24,6 +25,11 @@ export const seedRoles: Record<MasjidKey, Role[]> = {
 
 export const seedEmail = (masjid: MasjidKey, role: Role) => `${role}.${masjid}@imarah.test`;
 
+/** Each masjid has one open invitation. Tests know its link token. */
+export const seedInviteToken = (masjid: MasjidKey) => `seed-invite-${masjid}`;
+export const seedInviteEmail = (masjid: MasjidKey) => `jemputan.${masjid}@imarah.test`;
+const sha256 = (value: string) => createHash("sha256").update(value, "utf8").digest("hex");
+
 const masjidNames = { a: "Masjid Contoh A", b: "Surau Contoh B" };
 
 /** Rows per table, in the order they must be inserted. */
@@ -38,6 +44,18 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     user_id: users[role],
     role,
   }));
+
+  const invitations = [
+    {
+      id: seedId(masjid, 14, 0),
+      masjid_id,
+      email: seedInviteEmail(masjid),
+      role: "ajk",
+      token_hash: sha256(seedInviteToken(masjid)),
+      invited_by: pengerusi,
+      expires_at: "2099-01-01T00:00:00Z",
+    },
+  ];
 
   const households = [1, 2, 3, 4, 5].map((n) => ({
     id: seedId(masjid, 2, n),
@@ -133,6 +151,7 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
 
   return [
     ["memberships", memberships],
+    ["invitations", invitations],
     ["households", households],
     ["members", members],
     ["funds", funds],
@@ -172,6 +191,7 @@ export const firstRowId = (masjid: MasjidKey, table: string) => {
     receipt_counters: 11,
     reports: 12,
     periods: 13,
+    invitations: 14,
   };
   if (table === "masjids") return masjidId(masjid);
   return seedId(masjid, tableNumbers[table], table === "households" ? 1 : 0);

@@ -18,6 +18,7 @@ const readers: Record<string, Role[]> = {
   collections: [P, B, S, A],
   funds: [P, B, S, A, I],
   households: [P, B, S, A],
+  invitations: [P],
   khairat_members: [P, B, S, A],
   khairat_plans: [P, B, S, A],
   masjids: [P, B, S, A, I],
@@ -93,6 +94,12 @@ const attempts: Attempt[] = [
     row: () => ({ date: OPEN_DATE, amount_sen: 500, description: "Contoh" }),
   },
   {
+    name: "invite a user",
+    allowed: [P],
+    table: "invitations",
+    row: () => ({ email: `jemput-${unique()}@imarah.test`, role: "ajk", token_hash: unique() }),
+  },
+  {
     name: "prepare a report",
     allowed: [P, B, S],
     table: "reports",
@@ -126,6 +133,17 @@ describe("writes with no direct route", () => {
       .from("memberships")
       .update({ role: "pengerusi" })
       .eq("user_id", await userId("a", role))
+      .select();
+    if (error) expect(error.code).toBe(PERMISSION_DENIED);
+    else expect(data).toEqual([]);
+  });
+
+  it.each([B, S, A, I] as Role[])("%s cannot revoke an invitation", async (role) => {
+    const client = await userClient("a", role);
+    const { data, error } = await client
+      .from("invitations")
+      .update({ revoked_at: new Date().toISOString() })
+      .eq("id", firstRowId("a", "invitations"))
       .select();
     if (error) expect(error.code).toBe(PERMISSION_DENIED);
     else expect(data).toEqual([]);

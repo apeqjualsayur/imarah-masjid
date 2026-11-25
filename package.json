@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3009",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -12,21 +12,24 @@
     "test:e2e": "playwright test",
     "test:isolation": "vitest run --config vitest.isolation.config.mts",
     "db:seed": "tsx scripts/seed.ts",
+    "admin:create": "tsx scripts/create-admin.ts",
     "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@serwist/turbopack": "^9.5.13",
+    "@supabase/ssr": "^0.12.7",
     "esbuild": "^0.28.2",
     "lucide-react": "^1.70.0",
     "next": "16.4.5",
     "next-intl": "^4.14.9",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
     "serwist": "^9.5.13"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.0",
-    "@supabase/supabase-js": "^2.119.0",
+    "@supabase/supabase-js": "^2.119.2",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^24.19.2",
     "@types/react": "^19",
