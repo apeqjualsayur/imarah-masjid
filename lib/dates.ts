@@ -3,6 +3,24 @@ const MONTHS = {
   en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 } as const;
 
+const FULL_MONTHS = {
+  ms: ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"],
+  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+} as const;
+
+/** "2026-11" -> "November 2026". */
+export function formatMonth(month: string, locale: string) {
+  const [year, m] = month.split("-").map(Number);
+  return `${(locale === "en" ? FULL_MONTHS.en : FULL_MONTHS.ms)[m - 1]} ${year}`;
+}
+
+/** "2026-10-29" (a plain date, no time) -> "29 Okt" or "29 Okt 2026". */
+export function formatDay(date: string, locale: string, withYear = true) {
+  const [year, m, day] = date.split("-").map(Number);
+  const months = locale === "en" ? MONTHS.en : MONTHS.ms;
+  return withYear ? `${day} ${months[m - 1]} ${year}` : `${day} ${months[m - 1]}`;
+}
+
 /** "29 Okt 2026", in Malaysian time. */
 export function formatDate(value: string | Date, locale: string) {
   const parts = new Intl.DateTimeFormat("en-GB", {

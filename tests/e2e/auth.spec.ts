@@ -48,7 +48,7 @@ test("create a masjid, invite a Bendahari, and each sees a different menu", asyn
   await pengerusi.getByLabel("Zon waktu solat").selectOption("SGR01");
   await pengerusi.getByRole("button", { name: "Daftar masjid" }).click();
 
-  await expect(pengerusi.getByRole("heading", { name: "Utama" })).toBeVisible();
+  await expect(pengerusi.getByRole("heading", { name: "Ringkasan kewangan" })).toBeVisible();
   await expect(pengerusi.getByRole("complementary").getByText(masjidName)).toBeVisible();
   await expect(mainNav(pengerusi).getByRole("link")).toHaveText([
     "Utama",
@@ -78,7 +78,7 @@ test("create a masjid, invite a Bendahari, and each sees a different menu", asyn
   await bendahari.getByLabel("Kata laluan").fill(env.password);
   await bendahari.getByRole("button", { name: "Terima jemputan" }).click();
 
-  await expect(bendahari.getByRole("heading", { name: "Utama" })).toBeVisible();
+  await expect(bendahari.getByRole("heading", { name: "Ringkasan kewangan" })).toBeVisible();
   const sidebar = bendahari.getByRole("complementary");
   await expect(sidebar.getByText(masjidName)).toBeVisible();
   await expect(sidebar.getByText("Bendahari", { exact: true })).toBeVisible();

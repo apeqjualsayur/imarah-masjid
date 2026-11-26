@@ -79,13 +79,14 @@ const attempts: Attempt[] = [
     name: "add a fund",
     allowed: [P, B],
     table: "funds",
-    row: () => ({ name: `Tabung ${unique()}` }),
+    // Saved already archived, so test funds do not crowd the dashboard.
+    row: () => ({ name: `Tabung ${unique()}`, archived_at: new Date().toISOString() }),
   },
   {
     name: "add a category",
     allowed: [P, B],
     table: "categories",
-    row: () => ({ name: `Kategori ${unique()}`, type: "income" }),
+    row: () => ({ name: `Kategori ${unique()}`, type: "income", archived_at: new Date().toISOString() }),
   },
   {
     name: "import a bank line",

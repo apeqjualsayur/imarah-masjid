@@ -26,6 +26,8 @@ export const PERMISSIONS = {
   "khairat.record": [B, S],
   "transactions.record": [B],
   "transactions.reverse": [P, B],
+  /** Create, rename and archive funds and categories. */
+  "funds.manage": [P, B],
   "collections.count": [B, A],
   "collections.confirm": [P, B, A],
   "receipts.view": [P, B, S, A],

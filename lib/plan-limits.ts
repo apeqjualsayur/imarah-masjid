@@ -1,6 +1,6 @@
-// The one place that knows plan limits (_specs/phase1.md section 8). Step 5
-// checks households here in the app; Step 13 moves the hard limits into the
-// database and adds lib/plans.ts.
+// The one place that knows plan limits (_specs/phase1.md section 8). Steps 5
+// and 6 check households and funds here in the app; Step 13 moves the hard
+// limits into the database and adds lib/plans.ts.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -39,6 +39,8 @@ export async function checkPlanLimit(
 
   let query = supabase.from(TABLES[resource]).select("id", { count: "exact", head: true }).eq("masjid_id", masjid.id);
   if (resource === "users") query = query.eq("status", "active");
+  // Archived funds have no money in them and cannot take entries, so only open ones count.
+  if (resource === "funds") query = query.is("archived_at", null);
   const { count, error } = await query;
   if (error) throw new Error(`plan limit: ${error.message}`);
   return withinLimit(masjid.plan, resource, count ?? 0, adding);

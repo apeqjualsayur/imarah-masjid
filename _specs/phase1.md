@@ -81,6 +81,15 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - `checkPlanLimit` in `lib/plan-limits.ts` (Asas: 150 households) is checked by the app on add and import; the database enforces it from Step 13.
 - Household change history (`household_history`) for Pengerusi and Bendahari: who, when, which fields. Personal fields show "changed" only; the log never held their values.
 
+### Cash book decisions (Step 6)
+- New masjids get default categories (income: Kutipan Jumaat, Derma, Sewaan dewan, Khairat, Lain-lain; expense: Bil elektrik/air, Gaji, Penyelenggaraan, Kebajikan, Lain-lain) and default funds: Tabung Am and Pembangunan (restricted) on Asas; also Khairat Kematian (restricted) and Amal Jariah on paid plans. New masjids start on Asas, so they get two; more are added under Tetapan > Dana & kategori.
+- Funds and categories are archived, never deleted (`archived_at`). A fund can be archived only at a zero balance (database trigger). Asas counts active funds only (app check; database from Step 13). Category type (income or expense) cannot change after creation. Who: Pengerusi and Bendahari (`funds.manage`).
+- Rules on every new entry (trigger `check_transaction`): no date after today in Malaysia; no archived fund or category; an ordinary entry's category must match its direction; a reversal needs a reason, keeps the original's category and cannot be dated before it. Rows saved before Step 6 are untouched.
+- A reversal is dated today, so a correction to a locked month lands in the current open month. It counts against the side it cancels: a cancelled receipt lowers income rather than adding an expense (same rule in `lib/cashbook.ts`, `fund_summary` and `masjid_totals`).
+- `fund_summary(from, to)` runs with the caller's rights (Imam gets nothing). `masjid_totals(month)` gives the total and the month's income and expense to every role including the Imam, never the rows. `member_names()` gives names only (no emails) of the masjid's own people for "recorded by" lines.
+- Attachments: private bucket `transaction-files`, `masjids/<masjid_id>/<uuid>.<jpg|png|webp|pdf>`, max 5 MB. Uploaded from the browser straight to Storage as the user (Vercel limits server requests to 4.5 MB), then the server re-checks the file's bytes before saving the entry. Bendahari uploads; P, B, S, AJK read; a file saved with an entry can never be deleted or replaced; an upload that never became an entry can be removed by the Bendahari.
+- Ledger running balance only for one fund with no other filter. CSV export: plain numbers in separate in and out columns, cells that Excel would run as formulas get a leading apostrophe.
+
 ## 6. Rules that never bend
 1. Money in integer sen.
 2. Transactions never edited or deleted; reversing entry via `reverses_id`.

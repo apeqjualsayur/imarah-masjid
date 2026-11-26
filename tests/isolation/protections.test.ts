@@ -22,11 +22,12 @@ async function addTransaction(overrides = {}) {
 }
 
 // Each run needs its own month, because period records can never be deleted.
+// Past months only: entries cannot be dated in the future.
 async function unusedMonth() {
   const { data } = await admin.from("periods").select("month").eq("masjid_id", MASJID_A);
   const used = new Set(data?.map((row) => row.month));
-  for (let year = 2030; year < 2100; year += 1) {
-    for (const month of ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]) {
+  for (let year = 2025; year >= 2000; year -= 1) {
+    for (const month of ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"]) {
       const candidate = `${year}-${month}-01`;
       if (!used.has(candidate)) return candidate;
     }
@@ -79,6 +80,7 @@ describe("reversals", () => {
       amount_sen: row.amount_sen,
       fund_id: row.fund_id,
       direction: "out",
+      reversal_reason: "Ujian pembatalan",
       ...overrides,
     });
 
@@ -219,6 +221,7 @@ describe("locked months", () => {
         reverses_id: original.id,
         amount_sen: original.amount_sen,
         direction: "out",
+        reversal_reason: "Ujian bulan dikunci",
       }),
     );
     expect(reversalError).toBeNull();

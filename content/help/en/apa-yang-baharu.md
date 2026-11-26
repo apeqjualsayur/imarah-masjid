@@ -6,6 +6,15 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # What's new
 
+## November 2026: Cash book
+
+- **Record receipts and payments.** The Bendahari records money in and out under **Finance**, by fund and category, with a photo of the receipt or a PDF attached.
+- **Cancel, never delete.** A wrong entry is cancelled with a reason, then the correct one is entered. The original stays, marked "Cancelled".
+- **Ledger.** Filter by month, fund, category and kind. Choose one fund for a running balance. Export to CSV.
+- **Home dashboard.** Total of all funds, each fund's balance, and this month's money in and out. The Imam sees the totals only.
+- **Funds & categories** under Settings: add, rename, mark restricted and archive.
+- **Locked months** give a clear message if someone tries to add an entry to them.
+
 ## November 2026: Kariah registry
 
 - **Register households.** The Setiausaha can add households and family members under **Kariah**. Search by name, phone or address.

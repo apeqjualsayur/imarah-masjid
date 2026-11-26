@@ -17,13 +17,13 @@ test("shows the right navigation for the screen width", async ({ page, isMobile 
 
 test("switches between Bahasa Malaysia and English", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Utama" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ringkasan kewangan" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "ms");
 
   await page.getByRole("button", { name: "English" }).click();
-  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Finance summary" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Finance summary" })).toBeVisible();
 });

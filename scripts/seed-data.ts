@@ -87,17 +87,25 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     relation: "anak",
   }));
 
-  const funds = ["Tabung Am", "Pembangunan", "Khairat"].map((name, n) => ({
+  // New rows go on the end: the seed only adds rows whose id is missing.
+  const funds = ["Tabung Am", "Pembangunan", "Khairat", "Amal Jariah"].map((name, n) => ({
     id: seedId(masjid, 4, n),
     masjid_id,
     name,
-    restricted: n > 0,
+    restricted: n === 1 || n === 2,
   }));
 
   const categories = [
     { name: "Kutipan Jumaat", type: "income" },
     { name: "Derma", type: "income" },
     { name: "Utiliti", type: "expense" },
+    { name: "Sewaan dewan", type: "income" },
+    { name: "Khairat", type: "income" },
+    { name: "Lain-lain", type: "income" },
+    { name: "Gaji", type: "expense" },
+    { name: "Penyelenggaraan", type: "expense" },
+    { name: "Kebajikan", type: "expense" },
+    { name: "Lain-lain", type: "expense" },
   ].map((category, n) => ({ id: seedId(masjid, 5, n), masjid_id, ...category }));
 
   const transactions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {

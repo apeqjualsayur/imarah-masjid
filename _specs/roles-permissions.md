@@ -11,6 +11,7 @@ Y = allowed, V = view only, - = no access. Enforced in RLS; the UI hides what a 
 | Khairat fees (record payment) | - | Y | Y | - | - |
 | Record receipt or payment | - | Y | - | - | - |
 | Reverse a transaction | Y | Y | - | - | - |
+| Funds and categories (create, rename, archive) | Y | Y | - | - | - |
 | Enter Friday collection count | - | Y | - | Y | - |
 | Confirm collection (must be a different person from the counter) | Y | Y | - | Y | - |
 | E-receipts (view, share) | Y | Y | V | V | - |

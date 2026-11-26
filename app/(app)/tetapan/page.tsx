@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, Image as ImageIcon, KeyRound, Users } from "lucide-react";
+import { ChevronRight, Image as ImageIcon, KeyRound, Users, Wallet } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { SignOutButton } from "@/components/SignOutButton";
 import { can } from "@/lib/permissions";
@@ -36,6 +36,18 @@ export default async function TetapanPage() {
               <span className="flex-1">
                 <span className="block font-medium">{t("users")}</span>
                 <span className="block text-sm text-muted">{t("usersLead")}</span>
+              </span>
+              <ChevronRight aria-hidden className="size-5 text-muted" />
+            </Link>
+          </li>
+        ) : null}
+        {can(role, "funds.manage") ? (
+          <li>
+            <Link href="/tetapan/dana" className="flex min-h-tap items-center gap-3 px-4 py-3">
+              <Wallet aria-hidden className="size-5 text-primary" />
+              <span className="flex-1">
+                <span className="block font-medium">{t("funds")}</span>
+                <span className="block text-sm text-muted">{t("fundsLead")}</span>
               </span>
               <ChevronRight aria-hidden className="size-5 text-muted" />
             </Link>

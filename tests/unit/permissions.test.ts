@@ -14,6 +14,7 @@ const spec: Record<Capability, string> = {
   "khairat.record": "-YY--",
   "transactions.record": "-Y---",
   "transactions.reverse": "YY---",
+  "funds.manage": "YY---",
   "collections.count": "-Y-Y-",
   "collections.confirm": "YY-Y-",
   "receipts.view": "YYYY-",

@@ -6,6 +6,15 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: Buku tunai
+
+- **Rekod terimaan dan bayaran.** Bendahari merekod wang masuk dan keluar di **Kewangan**, mengikut dana dan kategori, dengan lampiran gambar resit atau PDF.
+- **Pembatalan, bukan padam.** Rekod yang salah dibatalkan dengan sebab, kemudian rekod yang betul dimasukkan. Rekod asal kekal dengan tanda "Dibatalkan".
+- **Lejar.** Tapis mengikut bulan, dana, kategori dan jenis. Pilih satu dana untuk baki berjalan. Eksport ke CSV.
+- **Papan pemuka Utama.** Jumlah semua dana, baki setiap dana dan wang masuk dan keluar bulan ini. Imam melihat jumlah sahaja.
+- **Dana & kategori** di Tetapan: tambah, namakan semula, tanda terhad dan arkib.
+- **Bulan dikunci** memberi mesej yang jelas jika rekod cuba dimasukkan ke dalamnya.
+
 ## November 2026: Daftar kariah
 
 - **Daftar isi rumah.** Setiausaha boleh menambah isi rumah dan ahli keluarga di **Kariah**. Cari mengikut nama, telefon atau alamat.
