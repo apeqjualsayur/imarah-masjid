@@ -156,11 +156,11 @@ describe("locked months", () => {
 
   it("cannot add a collection into one", async () => {
     const client = await userClient("a", "bendahari");
-    const { error } = await client.from("collections").insert({
-      fund_id: firstRowId("a", "funds"),
-      date: LOCKED_DATE,
-      total_sen: 100,
-      counted_by: await userId("a", "bendahari"),
+    const { error } = await client.rpc("record_collection", {
+      p_key: crypto.randomUUID(),
+      p_fund_id: firstRowId("a", "funds"),
+      p_date: LOCKED_DATE,
+      p_total_sen: 100,
     });
     expect(error?.message).toContain("locked period");
   });
@@ -374,72 +374,6 @@ describe("memberships", () => {
     expect(error?.code).toBe(PERMISSION_DENIED);
   });
 
-});
-
-describe("collections", () => {
-  async function addCollection() {
-    const client = await userClient("a", "bendahari");
-    const { data, error } = await client
-      .from("collections")
-      .insert({
-        fund_id: firstRowId("a", "funds"),
-        date: OPEN_DATE,
-        total_sen: 100_000,
-        counted_by: await userId("a", "bendahari"),
-      })
-      .select()
-      .single();
-    expect(error).toBeNull();
-    return data;
-  }
-
-  it("nobody can confirm their own count", async () => {
-    const row = await addCollection();
-    const client = await userClient("a", "bendahari");
-    const { error } = await client
-      .from("collections")
-      .update({ confirmed_by: await userId("a", "bendahari") })
-      .eq("id", row.id)
-      .select();
-    expect(error).not.toBeNull();
-  });
-
-  it("a different person can confirm it, once", async () => {
-    const row = await addCollection();
-    const pengerusi = await userClient("a", "pengerusi");
-    const { error } = await pengerusi
-      .from("collections")
-      .update({ confirmed_by: await userId("a", "pengerusi") })
-      .eq("id", row.id)
-      .select();
-    expect(error).toBeNull();
-
-    const ajk = await userClient("a", "ajk");
-    const { error: second } = await ajk
-      .from("collections")
-      .update({ confirmed_by: await userId("a", "ajk") })
-      .eq("id", row.id)
-      .select();
-    expect(second?.message).toContain("cannot be changed");
-  });
-
-  it("cannot confirm in someone else's name", async () => {
-    const row = await addCollection();
-    const client = await userClient("a", "ajk");
-    const { error } = await client
-      .from("collections")
-      .update({ confirmed_by: await userId("a", "pengerusi") })
-      .eq("id", row.id)
-      .select();
-    expect(error?.code).toBe(PERMISSION_DENIED);
-  });
-
-  it("the counted total cannot be changed", async () => {
-    const row = await addCollection();
-    const client = await userClient("a", "bendahari");
-    const { error } = await client.from("collections").update({ total_sen: 1 }).eq("id", row.id).select();
-    expect(error?.code).toBe(PERMISSION_DENIED);
-  });
 });
 
 describe("masjid_id comes from the session", () => {

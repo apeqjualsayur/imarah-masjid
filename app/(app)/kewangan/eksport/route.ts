@@ -40,6 +40,7 @@ export async function GET(request: Request) {
   const csv = ledgerCsv(
     rows.map((row) => ({
       ...row,
+      ref_no: [row.receipt_no, row.ref_no].filter(Boolean).join(" / ") || null,
       fund: fundName.get(row.fund_id) ?? "",
       category: row.category_id ? (categoryName.get(row.category_id) ?? null) : null,
       status: row.reverses_id ? "reversal" : reversed.has(row.id) ? "reversed" : "posted",

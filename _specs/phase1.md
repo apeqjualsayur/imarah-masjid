@@ -90,6 +90,17 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - Attachments: private bucket `transaction-files`, `masjids/<masjid_id>/<uuid>.<jpg|png|webp|pdf>`, max 5 MB. Uploaded from the browser straight to Storage as the user (Vercel limits server requests to 4.5 MB), then the server re-checks the file's bytes before saving the entry. Bendahari uploads; P, B, S, AJK read; a file saved with an entry can never be deleted or replaced; an upload that never became an entry can be removed by the Bendahari.
 - Ledger running balance only for one fund with no other filter. CSV export: plain numbers in separate in and out columns, cells that Excel would run as formulas get a leading apostrophe.
 
+### Collection decisions (Step 7)
+- Statuses: `counted` -> `confirmed`, or `counted` -> `needs_review` (confirmer's figure differs; nothing posted) -> recount -> `counted` -> `confirmed`. A count can be `void` (cancelled with a reason) before confirmation by the counter, the Pengerusi or the Bendahari. Confirmed and void counts can never change (trigger, applies to the secret key too).
+- Every write goes through security-definer functions `record_collection`, `confirm_collection`, `recount_collection`, `cancel_collection`; direct insert, update and delete on `collections` are revoked for app users. The check `confirmed_by <> counted_by` (Step 2) and `checked_by <> counted_by` hold for everyone.
+- Blind confirmation: the confirmer types their own count; the first figure is hidden in the app until confirmed (the counter sees their own; both figures show after a difference). This is a screen rule; the row is still readable by finance roles through the API.
+- Whoever recounts becomes the counter, so a different person must confirm.
+- On a match the function posts one receipt in the same database transaction: fund and date of the count, category "Kutipan Jumaat" (if it exists and is open), method cash, `created_by` = confirmer, and a receipt number. Confirming again returns `confirmed` and posts nothing (row lock).
+- Receipt numbers (started here, extended to all receipts in Step 8): `RC-<year>-<0001>` per masjid per calendar year of the entry date, from `receipt_counters` locked by the update in the same transaction; never reused, even after a reversal. Only the system writes `transactions.receipt_no` (column-level insert grant excludes it).
+- Idempotency: `client_key` (made on the phone when the form opens) is unique per masjid; sending again, even five at once, returns the first count.
+- Offline: a count made with no signal is kept in that browser's localStorage, per user, shown as "Belum dihantar", and sent on reconnect, on page open or by "Hantar sekarang". Pages are still never cached by the service worker (Step 1 decision), so offline saving works when the count screen was open before the signal dropped.
+- Breakdown: RM100, 50, 20, 10, 5, 1 notes counted by number; coins as one amount (`coins_sen`). The database checks it adds up to the total.
+
 ## 6. Rules that never bend
 1. Money in integer sen.
 2. Transactions never edited or deleted; reversing entry via `reverses_id`.

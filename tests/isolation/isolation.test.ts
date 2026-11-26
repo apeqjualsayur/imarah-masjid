@@ -153,13 +153,20 @@ describe("links across masjids are refused", () => {
 
   it("collection into masjid B's fund", async () => {
     const client = await userClient("a", "bendahari");
-    const { error } = await client.from("collections").insert({
+    const { error } = await client.rpc("record_collection", {
+      p_key: crypto.randomUUID(),
+      p_fund_id: firstRowId("b", "funds"),
+      p_date: "2026-10-20",
+      p_total_sen: 100,
+    });
+    expect(error?.message).toContain("choose an open fund");
+    const direct = await client.from("collections").insert({
       fund_id: firstRowId("b", "funds"),
       date: "2026-10-20",
       total_sen: 100,
       counted_by: await userId("a", "bendahari"),
     });
-    expect(error?.code).toBe(FOREIGN_KEY_VIOLATION);
+    expect(direct.error?.code).toBe(PERMISSION_DENIED);
   });
 
   it("khairat payment on masjid B's plan", async () => {

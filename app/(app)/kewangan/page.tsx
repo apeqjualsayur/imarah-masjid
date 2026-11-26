@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Download, Plus, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, HandCoins, Plus, Settings2 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Badge, Figure, SignedAmount } from "@/components/kewangan/bits";
 import { Notice } from "@/components/ui/forms";
@@ -53,6 +53,13 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
           <p className="mt-1 text-muted">{t("lead")}</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Link
+            href="/kewangan/kutipan"
+            className="inline-flex min-h-tap items-center gap-2 rounded-chip border border-border bg-surface px-4 font-semibold text-primary-dark"
+          >
+            <HandCoins aria-hidden className="size-4" />
+            {t("collectionsLink")}
+          </Link>
           {can(role, "funds.manage") ? (
             <Link
               href="/tetapan/dana"
@@ -183,6 +190,7 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
             const details = [
               fundName.get(row.fund_id),
               t(`methods.${row.method}`),
+              row.receipt_no,
               row.ref_no,
             ].filter(Boolean);
             return (

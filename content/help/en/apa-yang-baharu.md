@@ -6,6 +6,15 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # What's new
 
+## November 2026: Friday collections
+
+- **Two people confirm.** The Bendahari or an AJK counts; another person (Pengerusi, Bendahari or AJK) counts for themselves and confirms. Nobody can confirm their own count.
+- **Automatic receipts.** Once confirmed, a numbered receipt (for example RC-2026-0001) is recorded in the ledger.
+- **Different amounts** are marked "Needs checking" and not recorded until recounted.
+- **Note breakdown.** Enter the number of each note and the coins total; the total adds itself up.
+- **No signal?** The count is kept on the phone ("Not sent") and sent when there is signal, never recorded twice.
+- **Needs action** on the Home page shows collections waiting for you.
+
 ## November 2026: Cash book
 
 - **Record receipts and payments.** The Bendahari records money in and out under **Finance**, by fund and category, with a photo of the receipt or a PDF attached.

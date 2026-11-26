@@ -38,6 +38,8 @@ export default async function TransactionPage({ params }: PageProps<"/kewangan/[
   const other = (link as Transaction | null) ?? null;
   const cancelledBy = entry.reverses_id ? null : other;
 
+  const { data: fromCollection } = await supabase.from("collections").select("id").eq("transaction_id", entry.id).maybeSingle();
+
   let attachmentUrl: string | null = null;
   if (entry.attachment_path) {
     const { data: signed } = await supabase.storage.from(ATTACHMENT_BUCKET).createSignedUrl(entry.attachment_path, ATTACHMENT_LINK_SECONDS);
@@ -74,6 +76,12 @@ export default async function TransactionPage({ params }: PageProps<"/kewangan/[
           </dd>
           <dt className="text-sm text-muted">{t("method")}</dt>
           <dd>{k(`methods.${entry.method}`)}</dd>
+          {entry.receipt_no ? (
+            <>
+              <dt className="text-sm text-muted">{t("receiptNo")}</dt>
+              <dd className="font-semibold">{entry.receipt_no}</dd>
+            </>
+          ) : null}
           <dt className="text-sm text-muted">{t("ref")}</dt>
           <dd>{entry.ref_no || "—"}</dd>
           <dt className="text-sm text-muted">{t("note")}</dt>
@@ -96,6 +104,16 @@ export default async function TransactionPage({ params }: PageProps<"/kewangan/[
               "—"
             )}
           </dd>
+          {fromCollection ? (
+            <>
+              <dt className="text-sm text-muted">{t("source")}</dt>
+              <dd>
+                <Link href={`/kewangan/kutipan/${fromCollection.id}`} className="font-semibold text-primary-dark underline underline-offset-4">
+                  {t("fromCollection")}
+                </Link>
+              </dd>
+            </>
+          ) : null}
           <dt className="text-sm text-muted">{t("recordedBy")}</dt>
           <dd>{t("byOn", { name: who(entry.created_by), date: formatDate(entry.created_at, locale) })}</dd>
         </dl>

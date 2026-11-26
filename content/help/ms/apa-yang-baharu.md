@@ -6,6 +6,15 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: Kutipan Jumaat
+
+- **Dua orang mengesahkan.** Bendahari atau AJK mengira; seorang lagi (Pengerusi, Bendahari atau AJK) mengira sendiri dan mengesahkan. Tiada siapa boleh mengesahkan kiraan sendiri.
+- **Resit automatik.** Selepas disahkan, resit bernombor (contoh RC-2026-0001) direkod dalam lejar.
+- **Jumlah berbeza** ditanda "Perlu semak" dan tidak direkod sehingga dikira semula.
+- **Pecahan wang.** Masukkan bilangan setiap not dan jumlah syiling; jumlah dikira sendiri.
+- **Tiada isyarat?** Kiraan disimpan dalam telefon ("Belum dihantar") dan dihantar apabila ada isyarat, tanpa direkod dua kali.
+- **Perlu tindakan** di halaman Utama menunjukkan kutipan yang menunggu anda.
+
 ## November 2026: Buku tunai
 
 - **Rekod terimaan dan bayaran.** Bendahari merekod wang masuk dan keluar di **Kewangan**, mengikut dana dan kategori, dengan lampiran gambar resit atau PDF.

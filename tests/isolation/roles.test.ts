@@ -65,17 +65,6 @@ const attempts: Attempt[] = [
     row: () => ({ fund_id: fund(), amount_sen: 500, direction: "in", date: OPEN_DATE, method: "cash" }),
   },
   {
-    name: "enter a Friday count",
-    allowed: [B, A],
-    table: "collections",
-    row: async (role) => ({
-      fund_id: fund(),
-      date: OPEN_DATE,
-      total_sen: 500,
-      counted_by: await userId("a", role),
-    }),
-  },
-  {
     name: "add a fund",
     allowed: [P, B],
     table: "funds",

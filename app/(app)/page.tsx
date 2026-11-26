@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDownLeft, ArrowUpRight, Plus } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, HandCoins, Plus } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Badge, SignedAmount } from "@/components/kewangan/bits";
 import { currentMonth } from "@/lib/cashbook";
@@ -8,8 +8,10 @@ import { formatSen } from "@/lib/money";
 import { can } from "@/lib/permissions";
 import { requireMember } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
+import { loadOpenCollections } from "./kewangan/kutipan/data";
 import {
   loadCategories,
+  loadFunds,
   loadFundSummary,
   loadMasjidTotals,
   TRANSACTION_COLUMNS,
@@ -28,7 +30,7 @@ function BigAmount({ sen, className = "" }: { sen: number; className?: string })
 }
 
 export default async function UtamaPage() {
-  const { role } = await requireMember("dashboard.view");
+  const { user, role } = await requireMember("dashboard.view");
   const t = await getTranslations("utama");
   const k = await getTranslations("kewangan");
   const locale = await getLocale();
@@ -48,6 +50,17 @@ export default async function UtamaPage() {
     showLedger ? loadCategories() : Promise.resolve([]),
   ]);
 
+  // Counts this person can act on: confirm someone else's, or recount after a difference.
+  const mayConfirm = can(role, "collections.confirm");
+  const mayCount = can(role, "collections.count");
+  const actions =
+    mayConfirm || mayCount
+      ? (await loadOpenCollections()).filter((collection) =>
+          collection.status === "counted" ? mayConfirm && collection.counted_by !== user.id : mayCount,
+        )
+      : [];
+  const allFundNames = showFunds ? funds : await loadFunds();
+
   const openFunds = funds.filter((fund) => !fund.archived_at || fund.closing_sen !== 0);
   const recentRows = (recent?.data ?? []) as Transaction[];
   const fundName = new Map(funds.map((fund) => [fund.id, fund.name]));
@@ -60,16 +73,54 @@ export default async function UtamaPage() {
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="mt-1 text-muted">{formatMonth(month, locale)}</p>
         </div>
-        {can(role, "transactions.record") ? (
-          <Link
-            href="/kewangan/baru"
-            className="inline-flex min-h-tap items-center gap-2 rounded-chip bg-primary px-4 font-semibold text-surface"
-          >
-            <Plus aria-hidden className="size-4" />
-            {k("record")}
-          </Link>
-        ) : null}
+        <div className="flex flex-wrap gap-2">
+          {mayCount ? (
+            <Link
+              href="/kewangan/kutipan/baru"
+              className="inline-flex min-h-tap items-center gap-2 rounded-chip bg-primary px-4 font-semibold text-surface"
+            >
+              <HandCoins aria-hidden className="size-4" />
+              {t("recordCollection")}
+            </Link>
+          ) : null}
+          {can(role, "transactions.record") ? (
+            <Link
+              href="/kewangan/baru"
+              className="inline-flex min-h-tap items-center gap-2 rounded-chip border border-border bg-surface px-4 font-semibold text-primary-dark"
+            >
+              <Plus aria-hidden className="size-4" />
+              {k("record")}
+            </Link>
+          ) : null}
+        </div>
       </div>
+
+      {actions.length > 0 ? (
+        <section aria-labelledby="tindakan" className="mt-5">
+          <h2 id="tindakan" className="text-lg font-bold">
+            {t("actions", { count: actions.length })}
+          </h2>
+          <ul className="mt-3 space-y-2" data-testid="perlu-tindakan">
+            {actions.map((collection) => (
+              <li key={collection.id} className="flex flex-wrap items-center gap-3 rounded-card bg-surface p-4">
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold">{t("collectionOn", { date: formatDay(collection.date, locale) })}</span>
+                  <span className="block text-sm text-muted">
+                    {allFundNames.find((fund) => fund.id === collection.fund_id)?.name ?? "—"} ·{" "}
+                    {collection.status === "counted" ? t("awaitingConfirm") : t("awaitingRecount")}
+                  </span>
+                </span>
+                <Link
+                  href={`/kewangan/kutipan/${collection.id}`}
+                  className="inline-flex min-h-tap items-center rounded-chip bg-primary px-4 font-semibold text-surface"
+                >
+                  {collection.status === "counted" ? t("confirmAction") : t("recountAction")}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section aria-labelledby="jumlah" className="mt-5 rounded-hero bg-primary p-6 text-surface">
         <h2 id="jumlah" className="text-sm font-medium opacity-90">

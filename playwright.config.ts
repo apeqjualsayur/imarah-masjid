@@ -5,6 +5,9 @@ const PORT = 3217;
 export default defineConfig({
   testDir: "tests/e2e",
   fullyParallel: true,
+  // The dev server compiles each page on first visit; with many browsers at
+  // once that can take longer than the default 5 seconds after a save.
+  expect: { timeout: 15_000 },
   use: {
     baseURL: `http://localhost:${PORT}`,
     launchOptions: {

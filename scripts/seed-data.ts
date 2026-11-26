@@ -124,9 +124,10 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     };
   });
 
+  // The second is a pre-Step 7 sample: confirmed, with no ledger entry of its own.
   const collections = [
-    { id: seedId(masjid, 7, 0), date: "2026-10-16", counted_by: bendahari, confirmed_by: null },
-    { id: seedId(masjid, 7, 1), date: "2026-10-23", counted_by: bendahari, confirmed_by: pengerusi },
+    { id: seedId(masjid, 7, 0), date: "2026-10-16", counted_by: bendahari, confirmed_by: null, status: "counted" },
+    { id: seedId(masjid, 7, 1), date: "2026-10-23", counted_by: bendahari, confirmed_by: pengerusi, status: "confirmed" },
   ].map((collection) => ({ ...collection, masjid_id, fund_id: funds[0].id, total_sen: 142_050 }));
 
   const khairatPlans = [{ id: seedId(masjid, 8, 0), masjid_id, year: 2026, fee_sen: 5_000 }];
