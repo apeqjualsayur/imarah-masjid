@@ -52,7 +52,7 @@ Every table except `masjids` has `masjid_id` and RLS limiting rows to the caller
 | categories | Income and expense categories | masjid_id, name, type (income or expense) |
 | transactions | Every receipt and payment, append-only | masjid_id, fund_id, category_id, amount_sen, direction, date, ref_no, method, status, reverses_id, household_id (optional) |
 | collections | Friday box counts | masjid_id, date, fund_id, total_sen, counted_by, confirmed_by, transaction_id |
-| khairat_plans, khairat_members | Fees, status, arrears | masjid_id, household_id, year, fee_sen, paid_sen |
+| khairat_plans, khairat_members | Fees, status, arrears | masjid_id, household_id, year, fee_sen, coverage, pay_by, fund_id, people, paid_sen, ended_at |
 | bank_lines | Imported bank statement lines | masjid_id, date, amount_sen, description, matched_transaction_id |
 | periods | Month locks | masjid_id, month, locked_at, locked_by, unlock_reason |
 | audit_log | Who changed what, when; never edited | masjid_id, user_id, table_name, row_id, action, before, after, at |
@@ -111,7 +111,16 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - "Dijana oleh Imarah": always on Asas; paid plans can hide it with `masjids.receipt_hide_credit` (Pengerusi, Tetapan > E-resit).
 - Permissions: view and download P, B, S, AJK (`receipts.view`); share and email P, B (`receipts.share`). The Imam cannot read transactions at all.
 
-## 6. Rules that never bend
+### Khairat decisions (Step 9)
+- Standard plan and above: `planHasFeature(plan, "khairat")` in `lib/plan-limits.ts` for screens; `private.khairat_allowed()` in the database for setup policies and every khairat function. Asas sees an upgrade message.
+- `khairat_plans` per masjid per year: `fee_sen`, `coverage` (household | person), `pay_by` (last day to pay, a date in that year; owner chose a date over a number of days), `fund_id` (default the fund named Khairat…). Set by Pengerusi and Bendahari. The year never changes.
+- `khairat_members` per household per year, written only through `enrol_khairat`, `renew_khairat` (last year's members who did not end) and `end_khairat` (reason required; Bendahari, Setiausaha). `people` is fixed at enrolment: 1 per household, or the household's listed members (at least 1) per person. Due = fee × people.
+- Status is worked out, not stored (`lib/khairat.ts`): tamat if ended; aktif if paid in full or today is on or before `pay_by`; otherwise tunggakan. Arrears count only for tunggakan. Earlier years' arrears are shown per household.
+- Payments only through `record_khairat_payment` (Bendahari, Setiausaha): a receipt in the setup's fund, category "Khairat", `household_id`, `khairat_member_id`, note "Yuran khairat <year>", "Daripada" = head of household unless typed. Never more than the year's balance (row lock, so two at once cannot overpay; owner decision). Receipt number from Step 8.
+- `paid_sen` follows the ledger only: a trigger adds each linked payment and takes off a payment when it is reversed. App users cannot write members or `transactions.khairat_member_id`. Seed amounts paid before Imarah have no ledger entry.
+- No claims in Phase 1.
+
+
 1. Money in integer sen.
 2. Transactions never edited or deleted; reversing entry via `reverses_id`.
 3. Trigger rejects any change dated inside a locked period.

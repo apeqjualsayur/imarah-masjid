@@ -117,6 +117,16 @@ export default async function TransactionPage({ params }: PageProps<"/kewangan/[
               "—"
             )}
           </dd>
+          {entry.khairat_member_id && can(role, "khairat.view") ? (
+            <>
+              <dt className="text-sm text-muted">{t("source")}</dt>
+              <dd>
+                <Link href={`/khairat/${entry.khairat_member_id}`} className="font-semibold text-primary-dark underline underline-offset-4">
+                  {t("fromKhairat")}
+                </Link>
+              </dd>
+            </>
+          ) : null}
           {fromCollection ? (
             <>
               <dt className="text-sm text-muted">{t("source")}</dt>

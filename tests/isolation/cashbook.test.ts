@@ -307,10 +307,12 @@ describe("ten known entries in a fresh masjid, one cancelled", () => {
   });
 
   it("a new masjid starts with the default funds and categories", async () => {
-    const { data: funds } = await admin.from("funds").select("name, restricted").eq("masjid_id", masjid).order("created_at");
-    expect(funds!.slice(0, 2)).toEqual([
-      { name: "Tabung Am", restricted: false },
+    // The default funds are made together, at the same instant, so compare them in name order.
+    const { data: funds } = await admin.from("funds").select("name, restricted, created_at").eq("masjid_id", masjid).order("created_at");
+    const first = funds!.filter((fund) => fund.created_at === funds![0].created_at).map(({ name, restricted }) => ({ name, restricted }));
+    expect(first.sort((a, b) => a.name.localeCompare(b.name))).toEqual([
       { name: "Pembangunan", restricted: true },
+      { name: "Tabung Am", restricted: false },
     ]);
     const { data: categories } = await admin.from("categories").select("name, type").eq("masjid_id", masjid);
     expect(categories).toHaveLength(10);

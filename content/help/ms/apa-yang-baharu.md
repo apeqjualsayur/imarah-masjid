@@ -6,6 +6,16 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: Khairat
+
+- **Yuran khairat tahunan.** Pengerusi atau Bendahari menetapkan yuran, siapa dilindungi (setiap isi rumah atau setiap orang), tarikh akhir bayaran dan dana.
+- **Daftar ahli** dari Kariah, atau **daftar semula** semua ahli tahun lepas dengan satu tekan.
+- **Rekod bayaran** (penuh atau separa). Bayaran masuk ke lejar dana khairat dengan resit bernombor, dan status isi rumah dikemas kini serta-merta.
+- **Status:** Aktif, Tunggakan (selepas tarikh akhir bayaran) atau Tamat (dengan sebab).
+- **Senarai tunggakan** mengikut tahun, dengan tunggakan tahun lepas, dan eksport CSV.
+- **Kad Khairat** di halaman Utama.
+- Tersedia pada pelan Standard ke atas.
+
 ## November 2026: E-resit
 
 - **Nombor resit untuk setiap terimaan.** Setiap wang masuk mendapat nombor seperti RC-2026-0001, dalam urutan yang sama dengan Kutipan Jumaat. Nombor tidak pernah berulang.

@@ -6,6 +6,16 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # What's new
 
+## November 2026: Khairat
+
+- **Yearly khairat fees.** The Pengerusi or Bendahari sets the fee, who is covered (per household or per person), the last day to pay and the fund.
+- **Enrol members** from the Kariah, or **re-enrol** all of last year's members with one tap.
+- **Record payments** (full or part). Payments go into the khairat fund's ledger with a numbered receipt, and the household's status updates straight away.
+- **Status:** Active, In arrears (after the last day to pay) or Ended (with a reason).
+- **Arrears list** by year, with arrears from earlier years, and CSV export.
+- **Khairat card** on the Home page.
+- On Standard plans and above.
+
 ## November 2026: E-receipts
 
 - **A receipt number for every receipt.** Every receipt of money gets a number like RC-2026-0001, in the same sequence as Friday collections. Numbers never repeat.

@@ -9,6 +9,8 @@ Y = allowed, V = view only, - = no access. Enforced in RLS; the UI hides what a 
 | Kariah registry (edit, import) | - | - | Y | - | - |
 | Khairat membership and arrears (view) | Y | Y | Y | V | - |
 | Khairat fees (record payment) | - | Y | Y | - | - |
+| Khairat yearly setup (fee, coverage, last day to pay, fund) | Y | Y | - | - | - |
+| Khairat enrol, renew, end membership | - | Y | Y | - | - |
 | Record receipt or payment | - | Y | - | - | - |
 | Reverse a transaction | Y | Y | - | - | - |
 | Funds and categories (create, rename, archive) | Y | Y | - | - | - |

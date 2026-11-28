@@ -2,12 +2,15 @@ import Link from "next/link";
 import { ArrowDownLeft, ArrowUpRight, HandCoins, Plus } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Badge, SignedAmount } from "@/components/kewangan/bits";
-import { currentMonth } from "@/lib/cashbook";
+import { currentMonth, todayInMalaysia } from "@/lib/cashbook";
 import { formatDay, formatMonth } from "@/lib/dates";
 import { formatSen } from "@/lib/money";
+import { summarise, type KhairatSummary } from "@/lib/khairat";
 import { can } from "@/lib/permissions";
+import { planHasFeature } from "@/lib/plan-limits";
 import { requireMember } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
+import { loadMemberships, loadPlans } from "./khairat/data";
 import { loadOpenCollections } from "./kewangan/kutipan/data";
 import {
   loadCategories,
@@ -30,7 +33,7 @@ function BigAmount({ sen, className = "" }: { sen: number; className?: string })
 }
 
 export default async function UtamaPage() {
-  const { user, role } = await requireMember("dashboard.view");
+  const { user, role, masjid } = await requireMember("dashboard.view");
   const t = await getTranslations("utama");
   const k = await getTranslations("kewangan");
   const locale = await getLocale();
@@ -60,6 +63,15 @@ export default async function UtamaPage() {
         )
       : [];
   const allFundNames = showFunds ? funds : await loadFunds();
+
+  // Khairat this year (or the latest year set up), for those who may see it.
+  const today = todayInMalaysia();
+  let khairat: { year: number; summary: KhairatSummary } | null = null;
+  if (can(role, "khairat.view") && planHasFeature(masjid.plan, "khairat")) {
+    const [plans, memberships] = await Promise.all([loadPlans(), loadMemberships()]);
+    const plan = plans.find((item) => item.year <= Number(today.slice(0, 4))) ?? plans.at(-1);
+    if (plan) khairat = { year: plan.year, summary: summarise(memberships.filter((row) => row.year === plan.year), today) };
+  }
 
   const openFunds = funds.filter((fund) => !fund.archived_at || fund.closing_sen !== 0);
   const recentRows = (recent?.data ?? []) as Transaction[];
@@ -186,6 +198,36 @@ export default async function UtamaPage() {
       ) : (
         <p className="mt-6 rounded-card bg-surface p-5 text-sm text-muted">{t("totalsOnly")}</p>
       )}
+
+      {khairat ? (
+        <section aria-labelledby="khairat" className="mt-6 rounded-card bg-surface p-5" data-testid="kad-khairat">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="khairat" className="text-lg font-bold">
+              {t("khairatTitle", { year: khairat.year })}
+            </h2>
+            <Link
+              href={`/khairat?tahun=${khairat.year}&status=tunggakan`}
+              className="inline-flex min-h-tap items-center text-sm font-semibold text-primary-dark underline underline-offset-4"
+            >
+              {t("khairatArrearsList")}
+            </Link>
+          </div>
+          <dl className="mt-2 grid grid-cols-3 gap-3">
+            <div>
+              <dt className="text-sm text-muted">{t("khairatMembers")}</dt>
+              <dd className="text-xl font-bold tabular-nums">{khairat.summary.members}</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted">{t("khairatInArrears")}</dt>
+              <dd className="text-xl font-bold tabular-nums">{khairat.summary.tunggakan}</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted">{t("khairatArrears")}</dt>
+              <dd className="text-xl font-bold tabular-nums text-warn-ink">{formatSen(khairat.summary.arrears_sen)}</dd>
+            </div>
+          </dl>
+        </section>
+      ) : null}
 
       {showLedger ? (
         <section aria-labelledby="terkini" className="mt-6">

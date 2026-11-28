@@ -169,13 +169,17 @@ describe("links across masjids are refused", () => {
     expect(direct.error?.code).toBe(PERMISSION_DENIED);
   });
 
-  it("khairat payment on masjid B's plan", async () => {
+  it("khairat membership on masjid B's plan", async () => {
+    // Members are only written through the khairat functions (Step 9), which
+    // take the masjid from the session; the table itself refuses app users.
     const client = await userClient("a", "bendahari");
     const { error } = await client.from("khairat_members").insert({
       household_id: firstRowId("a", "households"),
       plan_id: firstRowId("b", "khairat_plans"),
     });
-    expect(error?.code).toBe(FOREIGN_KEY_VIOLATION);
+    expect(error?.code).toBe(PERMISSION_DENIED);
+    const { data } = await client.rpc("enrol_khairat", { p_year: 2026, p_household_ids: [firstRowId("b", "households")] });
+    expect(data).toBe(0);
   });
 
   it("bank line matched to masjid B's transaction", async () => {

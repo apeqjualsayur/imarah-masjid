@@ -10,6 +10,16 @@ const LIMITS: Record<string, Partial<Record<LimitedResource, number>>> = {
   asas: { households: 150, users: 3, funds: 2 },
 };
 
+/** Features left out of a plan. Khairat is Standard and above (_specs/phase1.md). */
+const MISSING_FEATURES: Record<string, string[]> = { asas: ["khairat"] };
+
+export type Feature = "khairat";
+
+/** Does the plan include the feature? The database checks the same for khairat. */
+export function planHasFeature(plan: string, feature: Feature): boolean {
+  return !(MISSING_FEATURES[plan] ?? []).includes(feature);
+}
+
 export function planLimit(plan: string, resource: LimitedResource): number | null {
   return LIMITS[plan]?.[resource] ?? null;
 }

@@ -12,6 +12,7 @@ const spec: Record<Capability, string> = {
   "kariah.edit": "--Y--",
   "khairat.view": "YYYY-",
   "khairat.record": "-YY--",
+  "khairat.setup": "YY---",
   "transactions.record": "-Y---",
   "transactions.reverse": "YY---",
   "funds.manage": "YY---",

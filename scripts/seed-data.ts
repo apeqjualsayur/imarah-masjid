@@ -130,15 +130,22 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     { id: seedId(masjid, 7, 1), date: "2026-10-23", counted_by: bendahari, confirmed_by: pengerusi, status: "confirmed" },
   ].map((collection) => ({ ...collection, masjid_id, fund_id: funds[0].id, total_sen: 142_050 }));
 
-  const khairatPlans = [{ id: seedId(masjid, 8, 0), masjid_id, year: 2026, fee_sen: 5_000 }];
+  // RM 50 per household, pay by 31 March, into the Khairat fund. 2025 is there
+  // so last year's arrears and "Daftar semula" have something to show.
+  const khairatPlans = [
+    { id: seedId(masjid, 8, 0), year: 2026, pay_by: "2026-03-31" },
+    { id: seedId(masjid, 8, 1), year: 2025, pay_by: "2025-03-31" },
+  ].map((plan) => ({ ...plan, masjid_id, fee_sen: 5_000, coverage: "household", fund_id: funds[2].id }));
 
-  const khairatMembers = households.slice(0, 2).map((household, n) => ({
-    id: seedId(masjid, 9, n),
-    masjid_id,
-    household_id: household.id,
-    plan_id: khairatPlans[0].id,
-    paid_sen: n === 0 ? 5_000 : 0,
-  }));
+  // 2026: household 1 paid, household 2 in arrears. 2025: households 1-3,
+  // household 3 left RM 20 unpaid.
+  const khairatMembers = [
+    { id: seedId(masjid, 9, 0), household_id: households[0].id, plan_id: khairatPlans[0].id, paid_sen: 5_000 },
+    { id: seedId(masjid, 9, 1), household_id: households[1].id, plan_id: khairatPlans[0].id, paid_sen: 0 },
+    { id: seedId(masjid, 9, 2), household_id: households[0].id, plan_id: khairatPlans[1].id, paid_sen: 5_000 },
+    { id: seedId(masjid, 9, 3), household_id: households[1].id, plan_id: khairatPlans[1].id, paid_sen: 5_000 },
+    { id: seedId(masjid, 9, 4), household_id: households[2].id, plan_id: khairatPlans[1].id, paid_sen: 3_000 },
+  ].map((member) => ({ ...member, masjid_id }));
 
   const bankLines = [
     { id: seedId(masjid, 10, 0), date: "2026-10-16", amount_sen: 11_250, description: "DuitNow Contoh" },
