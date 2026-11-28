@@ -6,6 +6,12 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: Tutup bulan dan log audit
+
+- **Kewangan > Tutup bulan** (Pengerusi): kunci bulan yang sudah tamat. Semakan sebelum mengunci menunjukkan kutipan Jumaat yang belum disahkan (mesti diselesaikan dahulu) dan amaran padanan bank.
+- Bulan yang dikunci **tidak boleh diubah oleh sesiapa**, dengan mesej yang jelas jika dicuba.
+- **Buka kunci** perlu sebab, yang direkod dalam log audit dan sejarah kunci bulan itu. Laporan untuk bulan itu ditanda **tidak lagi sah** sehingga dijana semula.
+- **Tetapan > Log audit** (Pengerusi dan Bendahari): siapa mengubah apa dan bila, dalam perkataan biasa, dengan tapisan tarikh, pengguna, jenis rekod dan tindakan. Pengerusi boleh eksport CSV.
 ## November 2026: DuitNow QR dan padanan bank
 
 - **Terima derma:** skrin baharu dengan QR DuitNow masjid untuk penderma imbas, dan boleh dicetak sebagai poster. Wang masuk terus ke akaun bank masjid.

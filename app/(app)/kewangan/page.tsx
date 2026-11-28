@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Download, HandCoins, Landmark, Plus, ReceiptText, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, HandCoins, Landmark, Lock, Plus, ReceiptText, Settings2 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Badge, Figure, SignedAmount } from "@/components/kewangan/bits";
 import { Notice } from "@/components/ui/forms";
@@ -77,6 +77,15 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
             >
               <Landmark aria-hidden className="size-4" />
               {t("bankLink")}
+            </Link>
+          ) : null}
+          {can(role, "periods.view") ? (
+            <Link
+              href="/kewangan/tutup-bulan"
+              className="inline-flex min-h-tap items-center gap-2 rounded-chip border border-border bg-surface px-4 font-semibold text-primary-dark"
+            >
+              <Lock aria-hidden className="size-4" />
+              {t("closeMonthLink")}
             </Link>
           ) : null}
           {can(role, "funds.manage") ? (

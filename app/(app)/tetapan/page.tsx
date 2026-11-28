@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, Image as ImageIcon, KeyRound, QrCode, ReceiptText, Users, Wallet } from "lucide-react";
+import { ChevronRight, History, Image as ImageIcon, KeyRound, QrCode, ReceiptText, Users, Wallet } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { SignOutButton } from "@/components/SignOutButton";
 import { can } from "@/lib/permissions";
@@ -84,6 +84,18 @@ export default async function TetapanPage() {
               <span className="flex-1">
                 <span className="block font-medium">{t("duitnow")}</span>
                 <span className="block text-sm text-muted">{t("duitnowLead")}</span>
+              </span>
+              <ChevronRight aria-hidden className="size-5 text-muted" />
+            </Link>
+          </li>
+        ) : null}
+        {can(role, "audit.view") ? (
+          <li>
+            <Link href="/tetapan/audit" className="flex min-h-tap items-center gap-3 px-4 py-3">
+              <History aria-hidden className="size-5 text-primary" />
+              <span className="flex-1">
+                <span className="block font-medium">{t("audit")}</span>
+                <span className="block text-sm text-muted">{t("auditLead")}</span>
               </span>
               <ChevronRight aria-hidden className="size-5 text-muted" />
             </Link>

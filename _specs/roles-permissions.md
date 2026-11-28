@@ -21,10 +21,12 @@ Y = allowed, V = view only, - = no access. Enforced in RLS; the UI hides what a 
 | Import bank statement, match, mark cash deposit, cancel an import | - | Y | - | - | - |
 | Terima derma (show the DuitNow QR) | Y | Y | Y | Y | Y |
 | Set the DuitNow QR, QR on receipts | Y | - | - | - | - |
+| Month list and lock checklist (view) | Y | V | - | - | - |
 | Lock or unlock a month | Y | - | - | - | - |
 | Prepare reports | Y | Y | Y | - | - |
 | Download official report (locked month only) | Y | Y | Y | - | - |
-| Audit log (view) | Y | V | - | - | - |
+| Audit log (view, filter) | Y | V | - | - | - |
+| Audit log CSV export | Y | - | - | - | - |
 | Invite or remove users, change roles | Y | - | - | - | - |
 | Masjid settings, logo | Y | - | - | - | - |
 | Plan and billing page | Y | - | - | - | - |

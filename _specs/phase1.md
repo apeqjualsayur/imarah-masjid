@@ -58,7 +58,7 @@ Every table except `masjids` has `masjid_id` and RLS limiting rows to the caller
 | periods | Month locks | masjid_id, month, locked_at, locked_by, unlock_reason |
 | audit_log | Who changed what, when; never edited | masjid_id, user_id, table_name, row_id, action, before, after, at |
 
-Also: `receipt_counters` (masjid_id, year, last_no) for gapless receipt numbers, and `reports` (masjid_id, type, period, storage_path, generated_by, at).
+Also: `receipt_counters` (masjid_id, year, last_no) for gapless receipt numbers, and `reports` (masjid_id, type, period, storage_path, generated_by, at, invalidated_at).
 
 Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, expires_at, accepted_at, accepted_by, revoked_at). Only a hash of the link token is stored; links last 7 days; one open invitation per email per masjid.
 
@@ -134,6 +134,14 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - An unmatched line can open the new-entry form filled in (date, amount, direction, method bank transfer, note = description); saving matches it.
 - Cancelling an import deletes its lines, only while none is matched or marked and none is in a locked month; the import row stays, marked cancelled.
 - All plans, including Asas (owner decision). Pengerusi views the reconciliation read-only (`bank.view`); Bendahari does everything else (`bank.match`). No bank credentials are ever asked for or stored.
+
+### Period lock and audit screen decisions (Step 11)
+- Locking and unlocking only through `lock_month(month)` and `unlock_month(month, reason)` (Pengerusi); direct insert and update on `periods` are revoked. `guard_period` still records `locked_by` and requires a reason to unlock, for every role.
+- Only months that have ended (Malaysia time) can be locked (owner decision), in any order. `lock_month` refuses a month with a Friday collection that is `counted` or `needs_review`, because a locked month's collection could never be confirmed.
+- Checklist before locking (`lib/periods.ts`): pending collections block; bank items warn only (lines not matched, reconciliation difference not zero, non-cash entries not in the bank, or non-cash entries with no statement imported). Phase 1 has no other drafts; counts kept offline on a phone are not visible to the server. With warnings, the Pengerusi ticks that they have read them.
+- The lock itself is the Step 2 trigger `reject_locked_month` on transactions, collections and bank lines, which holds for every role and the service role. A reversal of an entry from a locked month is dated today and lands in the open month. Every refusal shows `errors.locked_month`.
+- Unlocking marks reports for that month (`period = YYYY-MM`) and that year (`period = YYYY`) with `reports.invalidated_at` (trigger, so also for the service role). App users cannot update reports. A report produced later is a new row (Step 12).
+- Audit screen at Tetapan > Log audit: Pengerusi and Bendahari view and filter (`audit.view`); CSV export Pengerusi only (`audit.export`, owner decision), up to 5,000 rows. Filters: days in Malaysia time, user (or System), record type (group of tables in `lib/audit.ts`), action. Values shown in words (`auditValue`, `auditChanges`); lock and unlock named as such. Personal fields stay "[hidden]"/"[changed]" as stored. An isolation test fails if a new table has no record type.
 
 
 1. Money in integer sen.

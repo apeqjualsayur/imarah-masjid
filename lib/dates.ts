@@ -33,3 +33,14 @@ export function formatDate(value: string | Date, locale: string) {
   const months = locale === "en" ? MONTHS.en : MONTHS.ms;
   return `${get("day")} ${months[get("month") - 1]} ${get("year")}`;
 }
+
+/** "29 Okt 2026, 14:05", in Malaysian time. For audit entries and locks. */
+export function formatDateTime(value: string | Date, locale: string) {
+  const time = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kuala_Lumpur",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(value));
+  return `${formatDate(value, locale)}, ${time}`;
+}

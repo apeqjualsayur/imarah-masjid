@@ -37,10 +37,13 @@ export const PERMISSIONS = {
   "bank.view": [P, B],
   /** Import statements, match, mark cash, cancel an import. */
   "bank.match": [B],
+  /** The month list and lock checklist, read only. */
+  "periods.view": [P, B],
   "periods.lock": [P],
   "reports.prepare": [P, B, S],
   "reports.download": [P, B, S],
   "audit.view": [P, B],
+  "audit.export": [P],
   "users.manage": [P],
   "settings.manage": [P],
   "plan.view": [P],

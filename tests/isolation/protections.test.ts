@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { firstRowId, LOCKED_MONTH, masjidId, OPEN_DATE } from "../../scripts/seed-data";
-import { admin, firstAuditRowId, PERMISSION_DENIED, userClient, userId } from "./helpers";
+import { admin, firstAuditRowId, openMonth, PERMISSION_DENIED, userClient, userId } from "./helpers";
 
 const MASJID_A = masjidId("a");
 const LOCKED_DATE = "2026-09-15";
@@ -19,20 +19,6 @@ async function addTransaction(overrides = {}) {
   const { data, error } = await client.from("transactions").insert(newTransaction(overrides)).select().single();
   expect(error).toBeNull();
   return data;
-}
-
-// Each run needs its own month, because period records can never be deleted.
-// Past months only: entries cannot be dated in the future.
-async function unusedMonth() {
-  const { data } = await admin.from("periods").select("month").eq("masjid_id", MASJID_A);
-  const used = new Set(data?.map((row) => row.month));
-  for (let year = 2025; year >= 2000; year -= 1) {
-    for (const month of ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"]) {
-      const candidate = `${year}-${month}-01`;
-      if (!used.has(candidate)) return candidate;
-    }
-  }
-  throw new Error("no unused month left");
 }
 
 describe("transactions are append-only", () => {
@@ -198,19 +184,16 @@ describe("locked months", () => {
   });
 
   it("locks, reverses into an open month, and unlocks only with a reason", async () => {
-    const month = await unusedMonth();
+    const month = `${await openMonth(MASJID_A)}-01`;
     const date = month.replace(/01$/, "15");
     const original = await addTransaction({ date });
     const pengerusi = await userClient("a", "pengerusi");
     const bendahari = await userClient("a", "bendahari");
 
-    const { data: period, error: lockError } = await pengerusi
-      .from("periods")
-      .insert({ month, locked_at: new Date().toISOString() })
-      .select()
-      .single();
+    const { error: lockError } = await pengerusi.rpc("lock_month", { p_month: month });
     expect(lockError).toBeNull();
-    expect(period.locked_by).toBe(await userId("a", "pengerusi"));
+    const { data: period } = await admin.from("periods").select("locked_by").eq("masjid_id", MASJID_A).eq("month", month).single();
+    expect(period!.locked_by).toBe(await userId("a", "pengerusi"));
 
     const { error: blocked } = await bendahari.from("transactions").insert(newTransaction({ date }));
     expect(blocked?.message).toContain("locked period");
@@ -225,18 +208,10 @@ describe("locked months", () => {
     );
     expect(reversalError).toBeNull();
 
-    const { error: noReason } = await pengerusi
-      .from("periods")
-      .update({ locked_at: null })
-      .eq("id", period.id)
-      .select();
+    const { error: noReason } = await pengerusi.rpc("unlock_month", { p_month: month, p_reason: "" });
     expect(noReason?.message).toContain("needs a reason");
 
-    const { error: unlockError } = await pengerusi
-      .from("periods")
-      .update({ locked_at: null, unlock_reason: "Betulkan kesilapan" })
-      .eq("id", period.id)
-      .select();
+    const { error: unlockError } = await pengerusi.rpc("unlock_month", { p_month: month, p_reason: "Betulkan kesilapan" });
     expect(unlockError).toBeNull();
 
     const { error: open } = await bendahari.from("transactions").insert(newTransaction({ date }));
@@ -245,9 +220,7 @@ describe("locked months", () => {
 
   it("only Pengerusi can lock a month", async () => {
     const client = await userClient("a", "bendahari");
-    const { error } = await client
-      .from("periods")
-      .insert({ month: await unusedMonth(), locked_at: new Date().toISOString() });
+    const { error } = await client.rpc("lock_month", { p_month: `${await openMonth(MASJID_A)}-01` });
     expect(error?.code).toBe(PERMISSION_DENIED);
   });
 

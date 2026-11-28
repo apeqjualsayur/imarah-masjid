@@ -74,3 +74,26 @@ export async function firstAuditRowId(masjidId: string) {
   if (error) throw new Error(error.message);
   return data.id as string;
 }
+
+/**
+ * A past month of masjid A that is not locked and has no collection waiting,
+ * so a test can lock it. Tests that lock a month unlock it again, so months
+ * are reused rather than used up (month records can never be deleted).
+ */
+export async function openMonth(masjidId: string) {
+  const [{ data: periods }, { data: pending }] = await Promise.all([
+    admin.from("periods").select("month").eq("masjid_id", masjidId).not("locked_at", "is", null),
+    admin.from("collections").select("date").eq("masjid_id", masjidId).in("status", ["counted", "needs_review"]),
+  ]);
+  const locked = new Set(periods?.map((row) => (row.month as string).slice(0, 7)));
+  const busy = new Set(pending?.map((row) => (row.date as string).slice(0, 7)));
+  const months: string[] = [];
+  for (let year = 2000; year <= 2025; year += 1) {
+    for (let month = 1; month <= 12; month += 1) {
+      const candidate = `${year}-${`${month}`.padStart(2, "0")}`;
+      if (!locked.has(candidate) && !busy.has(candidate)) months.push(candidate);
+    }
+  }
+  if (months.length === 0) throw new Error("no open month left");
+  return months[Math.floor(Math.random() * months.length)];
+}

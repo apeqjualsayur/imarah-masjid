@@ -6,6 +6,12 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # What's new
 
+## November 2026: Close month and audit log
+
+- **Finance > Close month** (Pengerusi): lock months that have ended. The checks before locking show Friday collections not yet confirmed (these must be finished first) and bank matching warnings.
+- A locked month **cannot be changed by anyone**, with a clear message if someone tries.
+- **Unlock** needs a reason, kept in the audit log and the month's lock history. Reports for that month are marked **no longer valid** until produced again.
+- **Settings > Audit log** (Pengerusi and Bendahari): who changed what and when, in plain words, filtered by date, user, record type and action. The Pengerusi can export CSV.
 ## November 2026: DuitNow QR and bank matching
 
 - **Receive donations:** a new screen with the masjid's DuitNow QR for donors to scan, and to print as a poster. Money goes straight to the masjid's bank account.
