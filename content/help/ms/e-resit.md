@@ -50,6 +50,10 @@ Jika rekod dibatalkan, resitnya kekal dengan nombor yang sama dan salinan PDF me
 
 Baris kecil ini dicetak di bawah resit. Pada pelan berbayar, Pengerusi boleh menyembunyikannya di **Tetapan > E-resit**. Pelan Asas sentiasa menunjukkannya.
 
+## QR DuitNow pada resit
+
+Jika Pengerusi menetapkan QR DuitNow masjid dan menanda **Tunjukkan QR DuitNow pada resit** (Tetapan > DuitNow QR), QR dicetak di bahagian bawah resit supaya penderma boleh menderma lagi. Resit yang dibatalkan tidak menunjukkan QR. Lihat **DuitNow QR dan Terima derma**.
+
 ## Jika ada masalah
 
 - **"Pautan resit telah tamat tempoh"** (dilihat oleh penderma): buka resit itu dan tekan **Kongsi ke WhatsApp** sekali lagi untuk pautan baharu.

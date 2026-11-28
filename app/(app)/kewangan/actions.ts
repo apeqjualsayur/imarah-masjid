@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ATTACHMENT_BUCKET, checkAttachment } from "@/lib/attachment";
+import { bankError } from "@/lib/bank-import";
 import { cashbookError, isIsoDate, isMethod, NOTE_MAX, REASON_MAX, RECEIVED_FROM_MAX, REF_MAX, todayInMalaysia } from "@/lib/cashbook";
 import { looksLikeEmail, normaliseEmail } from "@/lib/invitations";
 import { parseRinggit } from "@/lib/money";
@@ -122,6 +123,17 @@ export async function recordTransaction(prev: EntryState, form: FormData): Promi
 
   revalidatePath("/kewangan");
   revalidatePath("/");
+
+  // Made from a bank line: match the two, then go back to that month's reconciliation.
+  // The entry stays saved even if the match is refused; it can then be matched by hand.
+  const bankLine = text(form, "bank_line_id");
+  if (UUID.test(bankLine)) {
+    const { error: matchError } = await supabase.rpc("match_bank_line", { p_line_id: bankLine, p_transaction_id: data.id });
+    revalidatePath("/kewangan/bank");
+    const outcome = matchError ? `ralat=${bankError(matchError)}` : "ok=match_bank_line";
+    redirect(`/kewangan/bank?bulan=${values.date.slice(0, 7)}&${outcome}`);
+  }
+
   redirect(`/kewangan?bulan=${values.date.slice(0, 7)}&disimpan=${data.id}${emailed}`);
 }
 

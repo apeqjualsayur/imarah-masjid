@@ -6,6 +6,14 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # What's new
 
+## November 2026: DuitNow QR and bank matching
+
+- **Receive donations:** a new screen with the masjid's DuitNow QR for donors to scan, and to print as a poster. Money goes straight to the masjid's bank account.
+- **Settings > DuitNow QR** (Pengerusi): upload a picture of the QR from the bank. Imarah checks the QR and shows the account name inside it to confirm. The QR can be printed on receipts.
+- **Finance > Bank matching** (Bendahari): import a bank statement CSV. Choose the columns once per bank; importing the same file twice adds nothing.
+- **Match suggestions** (same amount, within 3 days) with Accept or Reject, manual matching, **Create a ledger entry** from a bank line, and **Cash deposit**.
+- **Monthly reconciliation:** bank total, ledger total and the difference, with lists of what is not matched. Goal: RM 0.00. The Pengerusi can view it.
+- No bank passwords or logins are asked for or stored.
 ## November 2026: Khairat
 
 - **Yearly khairat fees.** The Pengerusi or Bendahari sets the fee, who is covered (per household or per person), the last day to pay and the fund.

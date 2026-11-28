@@ -36,6 +36,10 @@ Setiap terimaan mendapat nombor resit sendiri (contoh **RC-2026-0001**). Lihat [
 
 Pengerusi juga boleh membatalkan rekod, tetapi rekod yang betul dimasukkan oleh Bendahari.
 
+## Merekod daripada penyata bank
+
+Di **Kewangan > Padanan bank**, buka baris bank yang belum ada dalam lejar dan tekan **Cipta entri lejar**. Borang diisi dengan tarikh, jumlah, arah dan keterangan baris itu, dengan kaedah pindahan bank. Pilih dana dan kategori, kemudian **Simpan rekod**: entri itu dipadankan dengan baris bank secara automatik. Lihat **Padanan bank dan penyesuaian bulanan**.
+
 ## Membaca lejar
 
 - Pilih bulan dengan anak panah di atas senarai.

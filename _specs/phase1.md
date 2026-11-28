@@ -53,7 +53,8 @@ Every table except `masjids` has `masjid_id` and RLS limiting rows to the caller
 | transactions | Every receipt and payment, append-only | masjid_id, fund_id, category_id, amount_sen, direction, date, ref_no, method, status, reverses_id, household_id (optional) |
 | collections | Friday box counts | masjid_id, date, fund_id, total_sen, counted_by, confirmed_by, transaction_id |
 | khairat_plans, khairat_members | Fees, status, arrears | masjid_id, household_id, year, fee_sen, coverage, pay_by, fund_id, people, paid_sen, ended_at |
-| bank_lines | Imported bank statement lines | masjid_id, date, amount_sen, description, matched_transaction_id |
+| bank_lines | Imported bank statement lines | masjid_id, date, amount_sen (signed), description, matched_transaction_id, import_id, line_hash, cash_transfer, rejected_ids |
+| bank_formats, bank_imports | Saved column choices per bank; one row per uploaded file | masjid_id, name, date_column, description_columns, debit/credit or amount column, date_order; file_name, lines_added, lines_skipped, cancelled_at |
 | periods | Month locks | masjid_id, month, locked_at, locked_by, unlock_reason |
 | audit_log | Who changed what, when; never edited | masjid_id, user_id, table_name, row_id, action, before, after, at |
 
@@ -119,6 +120,20 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - Payments only through `record_khairat_payment` (Bendahari, Setiausaha): a receipt in the setup's fund, category "Khairat", `household_id`, `khairat_member_id`, note "Yuran khairat <year>", "Daripada" = head of household unless typed. Never more than the year's balance (row lock, so two at once cannot overpay; owner decision). Receipt number from Step 8.
 - `paid_sen` follows the ledger only: a trigger adds each linked payment and takes off a payment when it is reversed. App users cannot write members or `transactions.khairat_member_id`. Seed amounts paid before Imarah have no ledger entry.
 - No claims in Phase 1.
+
+### DuitNow QR and bank matching decisions (Step 10)
+- No pilot statement was available when Step 10 was built. The parser was built and tested on two made-up layouts (`tests/fixtures/bank-contoh-*.csv`: separate debit/credit with account details above the header; one signed amount column with named months). The first real pilot CSV must be imported and reconciled to zero before Step 10 counts as checked.
+- DuitNow QR: `masjids.duitnow_payload` keeps only the QR text (EMVCo), never the picture. The picture is read in the browser (`jsqr`); `lib/duitnow.ts` checks the layout, the CRC at the end, country MY and currency 458, and shows the account name inside it; the Pengerusi must tick that the name is the masjid's account. Set by the Pengerusi (`settings.manage`). QR drawn with `qrcode` (pure JS) on screen and in the PDF. `masjids.receipt_show_qr` prints it on receipts (not on cancelled copies).
+- "Terima derma" (`/derma`) shows the QR to every role, including the Imam, and prints as a poster (app menus are hidden when printing).
+- `bank_formats` (one per bank per masjid): columns kept by header text, so the header row is found again even with account details above it; either one signed amount column or debit and credit columns; date order dmy/ymd/mdy. Bendahari writes, Pengerusi reads.
+- `bank_imports` (file name hidden in the audit log), `bank_lines.import_id`, `line_hash`, `cash_transfer`, `rejected_ids`. All writes to lines and imports through `import_bank_lines`, `match_bank_line`, `mark_bank_cash`, `clear_bank_line`, `reject_bank_suggestion`, `cancel_bank_import` (Bendahari only); direct insert, update and delete are revoked.
+- Duplicates: `line_hash` = SHA-256 of date, amount in sen, description (lower case, spaces collapsed) and how many identical lines came before it in the same file; unique per masjid. Re-importing a file adds nothing; two identical payments on one day both stay. Lines from before Step 10 got a `lama-` hash.
+- A file is read on the server again before saving (max 900 KB, 5,000 lines). Lines in a locked month are shown and left out; the database refuses them anyway.
+- Matching: one bank line to one ledger entry (unique index), same signed amount, entry not cash, not cancelled and not a cancellation. Suggestions within 3 days, closest first, each entry once; a rejected suggestion is not shown again for that line. Manual matching at any date. When an entry is reversed, its match is removed by a trigger unless the bank line is in a locked month (then it shows as needing attention).
+- Reconciliation (owner decision): one bank account per masjid for now. Bank total = all lines in the month. Ledger total = the month's non-cash entries (bank transfer, DuitNow, cheque, cancellations included) + lines marked as a cash deposit or cash withdrawal (cash already in the ledger as the cash entry). Difference shown; goal RM 0.00. Lists: unmatched lines, unmatched entries (an entry and its cancellation in the same month are left out), matches across months (timing differences).
+- An unmatched line can open the new-entry form filled in (date, amount, direction, method bank transfer, note = description); saving matches it.
+- Cancelling an import deletes its lines, only while none is matched or marked and none is in a locked month; the import row stays, marked cancelled.
+- All plans, including Asas (owner decision). Pengerusi views the reconciliation read-only (`bank.view`); Bendahari does everything else (`bank.match`). No bank credentials are ever asked for or stored.
 
 
 1. Money in integer sen.

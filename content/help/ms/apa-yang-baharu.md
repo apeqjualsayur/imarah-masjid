@@ -6,6 +6,14 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: DuitNow QR dan padanan bank
+
+- **Terima derma:** skrin baharu dengan QR DuitNow masjid untuk penderma imbas, dan boleh dicetak sebagai poster. Wang masuk terus ke akaun bank masjid.
+- **Tetapan > DuitNow QR** (Pengerusi): muat naik gambar QR dari bank. Imarah menyemak QR dan menunjukkan nama akaun di dalamnya untuk disahkan. QR boleh dicetak pada resit.
+- **Kewangan > Padanan bank** (Bendahari): import penyata bank CSV. Pilih lajur sekali untuk setiap bank; import fail yang sama dua kali tidak menambah apa-apa.
+- **Cadangan padanan** (amaun sama, dalam 3 hari) dengan Terima atau Tolak, padanan manual, **Cipta entri lejar** daripada baris bank, dan **Deposit tunai**.
+- **Penyesuaian bulanan:** jumlah bank, jumlah lejar dan beza, dengan senarai yang belum dipadankan. Matlamat: RM 0.00. Pengerusi boleh melihat.
+- Tiada kata laluan atau log masuk bank diminta atau disimpan.
 ## November 2026: Khairat
 
 - **Yuran khairat tahunan.** Pengerusi atau Bendahari menetapkan yuran, siapa dilindungi (setiap isi rumah atau setiap orang), tarikh akhir bayaran dan dana.

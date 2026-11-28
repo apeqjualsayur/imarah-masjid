@@ -27,19 +27,26 @@ export function AppShell({ children, masjid, user, prayerDays, serverNow }: Prop
 
   return (
     <div className="min-h-dvh md:flex">
-      <Sidebar masjid={masjid} user={user} signOut={<SignOutButton />} />
+      {/* Printing (the donation poster) shows the page alone, without the app around it. */}
+      <div className="contents print:hidden">
+        <Sidebar masjid={masjid} user={user} signOut={<SignOutButton />} />
+      </div>
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileHeader masjid={masjid} userName={user.name} prayer={strip("row")} />
-        <div className="hidden flex-wrap items-center justify-end gap-x-4 gap-y-2 px-9 pt-5 md:flex">
+        <div className="contents print:hidden">
+          <MobileHeader masjid={masjid} userName={user.name} prayer={strip("row")} />
+        </div>
+        <div className="hidden flex-wrap items-center justify-end gap-x-4 gap-y-2 px-9 pt-5 md:flex print:hidden">
           {strip("strip")}
           <LanguageToggle />
         </div>
         <main className="flex-1 px-5 pt-4 pb-6 md:px-9 md:pt-6">{children}</main>
-        <div className="px-5 pb-28 md:hidden">
+        <div className="px-5 pb-28 md:hidden print:hidden">
           <FooterCredit />
         </div>
       </div>
-      <BottomTabs role={user.role} />
+      <div className="contents print:hidden">
+        <BottomTabs role={user.role} />
+      </div>
     </div>
   );
 }

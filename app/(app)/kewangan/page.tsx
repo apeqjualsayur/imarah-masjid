@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Download, HandCoins, Plus, ReceiptText, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, HandCoins, Landmark, Plus, ReceiptText, Settings2 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Badge, Figure, SignedAmount } from "@/components/kewangan/bits";
 import { Notice } from "@/components/ui/forms";
@@ -68,6 +68,15 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
             >
               <ReceiptText aria-hidden className="size-4" />
               {t("receiptsLink")}
+            </Link>
+          ) : null}
+          {can(role, "bank.view") ? (
+            <Link
+              href={`/kewangan/bank?bulan=${month}`}
+              className="inline-flex min-h-tap items-center gap-2 rounded-chip border border-border bg-surface px-4 font-semibold text-primary-dark"
+            >
+              <Landmark aria-hidden className="size-4" />
+              {t("bankLink")}
             </Link>
           ) : null}
           {can(role, "funds.manage") ? (

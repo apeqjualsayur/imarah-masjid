@@ -4,6 +4,7 @@ import { Download, ExternalLink, MessageCircle } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/BackLink";
 import { MasjidLogo } from "@/components/MasjidLogo";
+import { QrCode } from "@/components/QrCode";
 import { Badge } from "@/components/kewangan/bits";
 import { ReceiptEmailForm } from "@/components/kewangan/ReceiptEmailForm";
 import { senInMalayWords } from "@/lib/amount-words";
@@ -30,7 +31,7 @@ export default async function ReceiptPage({ params }: PageProps<"/kewangan/resit
 
   const [{ data: cancel }, { data: settings }, funds, logoUrl, t, pdf, k, locale] = await Promise.all([
     supabase.from("transactions").select("id, date").eq("reverses_id", entry.id).maybeSingle(),
-    supabase.from("masjids").select("receipt_hide_credit").eq("id", masjid.id).single(),
+    supabase.from("masjids").select("receipt_hide_credit, receipt_show_qr, duitnow_payload").eq("id", masjid.id).single(),
     loadFunds(),
     getLogoUrl(masjid.logo_path),
     getTranslations("resit"),
@@ -112,6 +113,12 @@ export default async function ReceiptPage({ params }: PageProps<"/kewangan/resit
           <p className={`mt-4 text-sm ${cancelled ? "font-semibold text-warn-ink" : "text-muted"}`}>
             {cancelled ? pdf("cancelledNote") : pdf("thanks")}
           </p>
+          {settings?.receipt_show_qr && settings.duitnow_payload && !cancelled ? (
+            <div className="mt-4 flex flex-col items-end">
+              <QrCode text={settings.duitnow_payload} label={pdf("qr")} className="size-24" />
+              <p className="mt-1 text-xs text-muted">{pdf("qr")}</p>
+            </div>
+          ) : null}
           {showsCredit(masjid.plan, settings?.receipt_hide_credit ?? false) ? (
             <p className="mt-6 text-xs text-muted">{pdf("credit")}</p>
           ) : null}

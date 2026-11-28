@@ -1,7 +1,7 @@
-import { FileText, Heart, House, Menu, Settings, Users, Wallet, type LucideIcon } from "lucide-react";
+import { FileText, Heart, House, Menu, QrCode, Settings, Users, Wallet, type LucideIcon } from "lucide-react";
 import { can, type Capability, type Role } from "@/lib/permissions";
 
-export type NavKey = "utama" | "kewangan" | "kariah" | "khairat" | "laporan" | "tetapan" | "lagi";
+export type NavKey = "utama" | "kewangan" | "kariah" | "khairat" | "derma" | "laporan" | "tetapan" | "lagi";
 
 export type NavItem = {
   key: NavKey;
@@ -15,13 +15,14 @@ const utama: NavItem = { key: "utama", href: "/", icon: House, capability: "dash
 const kewangan: NavItem = { key: "kewangan", href: "/kewangan", icon: Wallet, capability: "finance.view" };
 const kariah: NavItem = { key: "kariah", href: "/kariah", icon: Users, capability: "kariah.view" };
 const khairat: NavItem = { key: "khairat", href: "/khairat", icon: Heart, capability: "khairat.view" };
+const derma: NavItem = { key: "derma", href: "/derma", icon: QrCode, capability: "dashboard.view" };
 const laporan: NavItem = { key: "laporan", href: "/laporan", icon: FileText, capability: "reports.prepare" };
 const tetapan: NavItem = { key: "tetapan", href: "/tetapan", icon: Settings };
 const lagi: NavItem = { key: "lagi", href: "/lagi", icon: Menu };
 
-export const sidebarItems = [utama, kewangan, kariah, khairat, laporan, tetapan];
+export const sidebarItems = [utama, kewangan, kariah, khairat, derma, laporan, tetapan];
 export const tabItems = [utama, kewangan, kariah, khairat, lagi];
-export const moreItems = [laporan, tetapan];
+export const moreItems = [derma, laporan, tetapan];
 
 export function allowedItems(items: NavItem[], role: Role) {
   return items.filter((item) => !item.capability || can(role, item.capability));

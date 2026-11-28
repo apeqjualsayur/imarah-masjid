@@ -33,6 +33,9 @@ export const PERMISSIONS = {
   "collections.confirm": [P, B, A],
   "receipts.view": [P, B, S, A],
   "receipts.share": [P, B],
+  /** The reconciliation screen, read only. */
+  "bank.view": [P, B],
+  /** Import statements, match, mark cash, cancel an import. */
   "bank.match": [B],
   "periods.lock": [P],
   "reports.prepare": [P, B, S],

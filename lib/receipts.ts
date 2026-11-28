@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { formatDay } from "@/lib/dates";
 import { initials, LOGO_BUCKET } from "@/lib/logo";
 import { renderReceiptPdf, type ReceiptData, type ReceiptLabels } from "@/lib/pdf/receipt";
+import { qrShape } from "@/lib/qr";
 
 export type ReceiptRecord = {
   id: string;
@@ -81,7 +82,7 @@ export async function buildReceiptPdf(
   const [masjidResult, fundResult, cancelResult] = await Promise.all([
     client
       .from("masjids")
-      .select("name, address, state, plan, logo_path, receipt_hide_credit")
+      .select("name, address, state, plan, logo_path, receipt_hide_credit, receipt_show_qr, duitnow_payload")
       .eq("id", receipt.masjid_id)
       .single(),
     client.from("funds").select("name").eq("id", receipt.fund_id).eq("masjid_id", receipt.masjid_id).single(),
@@ -109,6 +110,7 @@ export async function buildReceiptPdf(
     amountSen: Number(receipt.amount_sen),
     cancelled: !!cancelResult.data,
     showCredit: showsCredit(masjid.plan, masjid.receipt_hide_credit),
+    qr: masjid.receipt_show_qr && masjid.duitnow_payload ? qrShape(masjid.duitnow_payload) : null,
   };
   const labels: ReceiptLabels = {
     title: t("title"),
@@ -124,6 +126,7 @@ export async function buildReceiptPdf(
     credit: t("credit"),
     cancelled: t("cancelled"),
     cancelledNote: t("cancelledNote"),
+    qr: t("qr"),
   };
 
   let pdf: Buffer;

@@ -26,6 +26,8 @@ export type ReceiptData = {
   amountSen: number;
   cancelled: boolean;
   showCredit: boolean;
+  /** The masjid's DuitNow QR, when it chose to print it on receipts. */
+  qr: { path: string; size: number } | null;
 };
 
 export type ReceiptLabels = {
@@ -42,6 +44,7 @@ export type ReceiptLabels = {
   credit: string;
   cancelled: string;
   cancelledNote: string;
+  qr: string;
 };
 
 const FONT_DIR = path.join(process.cwd(), "lib", "pdf", "fonts");
@@ -224,6 +227,17 @@ export async function renderReceiptPdf(data: ReceiptData, labels: ReceiptLabels)
   for (const line of wrap(closing, data.cancelled ? fonts.semibold : fonts.regular, 10, CONTENT)) {
     s.text(line, MARGIN, top, 10, data.cancelled ? fonts.semibold : fonts.regular, data.cancelled ? C.warnInk : C.muted);
     top += 15;
+  }
+
+  // The DuitNow QR on the right, for the next donation. Not on a cancelled copy.
+  if (data.qr && !data.cancelled) {
+    const box = 76;
+    const x = WIDTH - MARGIN - box;
+    const scale = box / data.qr.size;
+    page.drawRectangle({ x, y: HEIGHT - top - box, width: box, height: box, color: C.surface });
+    page.drawSvgPath(data.qr.path, { x, y: HEIGHT - top, scale, color: C.ink, borderWidth: 0 });
+    const label = wrap(labels.qr, fonts.regular, 7, box + 20)[0];
+    s.text(label, x + (box - fonts.regular.widthOfTextAtSize(label, 7)) / 2, top + box + 3, 7, fonts.regular, C.muted);
   }
 
   // Signature line for the Bendahari.

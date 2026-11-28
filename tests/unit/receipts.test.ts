@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import sharp from "sharp";
 import { numberInMalay, senInMalayWords } from "@/lib/amount-words";
 import { renderReceiptPdf, type ReceiptData, type ReceiptLabels } from "@/lib/pdf/receipt";
+import { qrShape } from "@/lib/qr";
 import { makeReceiptToken, readReceiptToken } from "@/lib/receipt-link";
 
 describe("numberInMalay", () => {
@@ -121,6 +122,7 @@ describe("receipt PDF", () => {
     credit: "Dijana oleh Imarah",
     cancelled: "BATAL",
     cancelledNote: "Resit ini telah dibatalkan.",
+    qr: "Derma melalui DuitNow",
   };
   const data: ReceiptData = {
     masjidName: "Masjid Al-Hidayah",
@@ -135,6 +137,7 @@ describe("receipt PDF", () => {
     amountSen: 10000,
     cancelled: false,
     showCredit: true,
+    qr: null,
   };
 
   it("makes a PDF with initials", async () => {
@@ -150,5 +153,12 @@ describe("receipt PDF", () => {
     const pdf = await renderReceiptPdf({ ...data, logo, cancelled: true, showCredit: false, receivedFrom: null }, labels);
     expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
     expect(pdf.includes(Buffer.from("/Image"))).toBe(true);
+  }, 30_000);
+
+  it("makes a PDF with the DuitNow QR", async () => {
+    const plain = await renderReceiptPdf(data, labels);
+    const withQr = await renderReceiptPdf({ ...data, qr: qrShape("00020101021126300014A000000615000101060000005204000053034585802MY5909MASJID AA6005KAJANG6304ABCD") }, labels);
+    expect(withQr.subarray(0, 5).toString()).toBe("%PDF-");
+    expect(withQr.length).toBeGreaterThan(plain.length + 1000);
   }, 30_000);
 });

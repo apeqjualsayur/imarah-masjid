@@ -36,6 +36,10 @@ Every receipt of money gets its own receipt number (for example **RC-2026-0001**
 
 The Pengerusi can also cancel an entry, but the correct entry is entered by the Bendahari.
 
+## Recording from a bank statement
+
+In **Finance > Bank matching**, open a bank line that is not in the ledger yet and press **Create a ledger entry**. The form is filled in with the line's date, amount, direction and description, with the bank transfer method. Choose the fund and category, then **Save entry**: the entry is matched to the bank line automatically. See **Bank matching and the monthly reconciliation**.
+
 ## Reading the ledger
 
 - Choose the month with the arrows above the list.

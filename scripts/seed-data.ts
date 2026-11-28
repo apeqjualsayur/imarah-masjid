@@ -147,10 +147,35 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     { id: seedId(masjid, 9, 4), household_id: households[2].id, plan_id: khairatPlans[1].id, paid_sen: 3_000 },
   ].map((member) => ({ ...member, masjid_id }));
 
+  // One saved bank format and one import, so every table has a row to test against.
+  const bankFormats = [
+    {
+      id: seedId(masjid, 15, 0),
+      masjid_id,
+      name: "Bank Contoh",
+      date_column: "Tarikh",
+      description_columns: ["Keterangan"],
+      debit_column: "Debit",
+      credit_column: "Kredit",
+    },
+  ];
+  const bankImports = [
+    {
+      id: seedId(masjid, 16, 0),
+      masjid_id,
+      format_id: bankFormats[0].id,
+      file_name: "penyata-contoh.csv",
+      lines_added: 1,
+      first_date: "2026-10-16",
+      last_date: "2026-10-16",
+      imported_by: bendahari,
+    },
+  ];
+
   const bankLines = [
-    { id: seedId(masjid, 10, 0), date: "2026-10-16", amount_sen: 11_250, description: "DuitNow Contoh" },
+    { id: seedId(masjid, 10, 0), date: "2026-10-16", amount_sen: 11_250, description: "DuitNow Contoh", import_id: bankImports[0].id },
     { id: seedId(masjid, 10, 1), date: "2026-09-16", amount_sen: 12_500, description: "Pindahan Contoh" },
-  ].map((line) => ({ ...line, masjid_id }));
+  ].map((line) => ({ ...line, masjid_id, line_hash: `contoh-${line.id}` }));
 
   const receiptCounters = [{ id: seedId(masjid, 11, 0), masjid_id, year: 2026, last_no: 10 }];
 
@@ -187,6 +212,8 @@ export function seedRows(masjid: MasjidKey, users: Partial<Record<Role, string>>
     ["collections", collections],
     ["khairat_plans", khairatPlans],
     ["khairat_members", khairatMembers],
+    ["bank_formats", bankFormats],
+    ["bank_imports", bankImports],
     ["bank_lines", bankLines],
     ["receipt_counters", receiptCounters],
     ["reports", reports],
@@ -236,6 +263,8 @@ export const firstRowId = (masjid: MasjidKey, table: string) => {
     reports: 12,
     periods: 13,
     invitations: 14,
+    bank_formats: 15,
+    bank_imports: 16,
   };
   if (table === "masjids") return masjidId(masjid);
   return seedId(masjid, tableNumbers[table], table === "households" ? 1 : 0);

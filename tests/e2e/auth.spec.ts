@@ -16,12 +16,12 @@ test("a wrong password shows a plain message", async ({ page }) => {
   await expect(page.getByRole("alert").filter({ hasText: "Emel atau kata laluan tidak betul." })).toBeVisible();
 });
 
-test("Imam sees only the home page and settings, and is stopped at other pages", async ({ page, isMobile }) => {
+test("Imam sees only the home page, Terima derma and settings, and is stopped at other pages", async ({ page, isMobile }) => {
   test.skip(isMobile, "menu items are checked on the desktop sidebar");
   await signIn(page, seedEmail("a", "imam"));
 
   const nav = mainNav(page);
-  await expect(nav.getByRole("link")).toHaveText(["Utama", "Tetapan"]);
+  await expect(nav.getByRole("link")).toHaveText(["Utama", "Terima derma", "Tetapan"]);
 
   await page.goto("/kariah");
   await expect(page.getByRole("heading", { name: "Tiada akses" })).toBeVisible();
@@ -55,6 +55,7 @@ test("create a masjid, invite a Bendahari, and each sees a different menu", asyn
     "Kewangan",
     "Kariah",
     "Khairat",
+    "Terima derma",
     "Laporan",
     "Tetapan",
   ]);
@@ -87,6 +88,7 @@ test("create a masjid, invite a Bendahari, and each sees a different menu", asyn
     "Kewangan",
     "Kariah",
     "Khairat",
+    "Terima derma",
     "Laporan",
     "Tetapan",
   ]);

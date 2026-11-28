@@ -50,6 +50,10 @@ If an entry is cancelled, its receipt keeps the same number and the PDF copy sho
 
 This small line is printed at the bottom of receipts. On paid plans, the Pengerusi can hide it under **Settings > E-receipts**. The Asas plan always shows it.
 
+## DuitNow QR on receipts
+
+If the Pengerusi has set up the masjid's DuitNow QR and ticked **Show the DuitNow QR on receipts** (Settings > DuitNow QR), the QR is printed at the bottom of the receipt so donors can give again. Cancelled receipts do not show the QR. See **DuitNow QR and Receive donations**.
+
 ## If something goes wrong
 
 - **"Pautan resit telah tamat tempoh"** (seen by the donor): open the receipt and tap **Share to WhatsApp** again for a new link.

@@ -10,6 +10,8 @@ const FOREIGN_KEY_VIOLATION = "23503";
 // A harmless change per table, for the update attempts.
 const patches: Record<string, Row> = {
   audit_log: { table_name: "dicerobohi" },
+  bank_formats: { name: "dicerobohi" },
+  bank_imports: { file_name: "dicerobohi" },
   bank_lines: { description: "dicerobohi" },
   categories: { name: "dicerobohi" },
   collections: { total_sen: 1 },
@@ -184,10 +186,24 @@ describe("links across masjids are refused", () => {
 
   it("bank line matched to masjid B's transaction", async () => {
     const client = await userClient("a", "bendahari");
-    const { error } = await client
-      .from("bank_lines")
-      .update({ matched_transaction_id: firstRowId("b", "transactions") })
-      .eq("id", firstRowId("a", "bank_lines"));
-    expect(error?.code).toBe(FOREIGN_KEY_VIOLATION);
+    const { error } = await client.rpc("match_bank_line", {
+      p_line_id: firstRowId("a", "bank_lines"),
+      p_transaction_id: firstRowId("b", "transactions"),
+    });
+    expect(error?.message).toContain("bank: entry not found");
+  });
+
+  it("bank functions on masjid B's line", async () => {
+    const client = await userClient("a", "bendahari");
+    const line = firstRowId("b", "bank_lines");
+    for (const [fn, args] of [
+      ["mark_bank_cash", { p_line_id: line }],
+      ["clear_bank_line", { p_line_id: line }],
+      ["reject_bank_suggestion", { p_line_id: line, p_transaction_id: firstRowId("b", "transactions") }],
+      ["cancel_bank_import", { p_import_id: firstRowId("b", "bank_imports") }],
+    ] as const) {
+      const { error } = await client.rpc(fn, args);
+      expect(error?.message, fn).toMatch(/not found/);
+    }
   });
 });

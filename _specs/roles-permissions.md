@@ -17,7 +17,10 @@ Y = allowed, V = view only, - = no access. Enforced in RLS; the UI hides what a 
 | Enter Friday collection count | - | Y | - | Y | - |
 | Confirm collection (must be a different person from the counter) | Y | Y | - | Y | - |
 | E-receipts (view, share) | Y | Y | V | V | - |
-| Import bank statement, match | - | Y | - | - | - |
+| Bank reconciliation (view) | Y | Y | - | - | - |
+| Import bank statement, match, mark cash deposit, cancel an import | - | Y | - | - | - |
+| Terima derma (show the DuitNow QR) | Y | Y | Y | Y | Y |
+| Set the DuitNow QR, QR on receipts | Y | - | - | - | - |
 | Lock or unlock a month | Y | - | - | - | - |
 | Prepare reports | Y | Y | Y | - | - |
 | Download official report (locked month only) | Y | Y | Y | - | - |

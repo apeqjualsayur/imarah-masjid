@@ -13,6 +13,8 @@ const ROLES: Role[] = [P, B, S, A, I];
 // Who can read each table, from the plan table and _specs/roles-permissions.md.
 const readers: Record<string, Role[]> = {
   audit_log: [P, B],
+  bank_formats: [P, B],
+  bank_imports: [P, B],
   bank_lines: [P, B],
   categories: [P, B, S, A],
   collections: [P, B, S, A],
@@ -78,10 +80,10 @@ const attempts: Attempt[] = [
     row: () => ({ name: `Kategori ${unique()}`, type: "income", archived_at: new Date().toISOString() }),
   },
   {
-    name: "import a bank line",
+    name: "save a bank's column choices",
     allowed: [B],
-    table: "bank_lines",
-    row: () => ({ date: OPEN_DATE, amount_sen: 500, description: "Contoh" }),
+    table: "bank_formats",
+    row: () => ({ name: `Bank ${unique()}`, date_column: "Tarikh", description_columns: ["Keterangan"], amount_column: "Amaun" }),
   },
   {
     name: "invite a user",
@@ -107,6 +109,19 @@ describe.each(attempts)("$name", ({ allowed, table, row }) => {
 });
 
 describe("writes with no direct route", () => {
+  // Bank lines and imports change only through the bank functions (tests/isolation/bank.test.ts).
+  it.each(ROLES)("%s cannot add a bank line directly", async (role) => {
+    const client = await userClient("a", role);
+    const { error } = await client.from("bank_lines").insert({ date: OPEN_DATE, amount_sen: 500, description: "Contoh", line_hash: unique() });
+    expect(error?.code).toBe(PERMISSION_DENIED);
+  });
+
+  it.each(ROLES)("%s cannot record an import directly", async (role) => {
+    const client = await userClient("a", role);
+    const { error } = await client.from("bank_imports").insert({ file_name: "x.csv", imported_by: await userId("a", role) });
+    expect(error?.code).toBe(PERMISSION_DENIED);
+  });
+
   it.each(ROLES)("%s cannot change receipt counters directly", async (role) => {
     const client = await userClient("a", role);
     const { error } = await client

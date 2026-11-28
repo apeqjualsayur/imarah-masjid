@@ -172,29 +172,28 @@ describe("locked months", () => {
       .select("id")
       .eq("masjid_id", MASJID_A)
       .eq("date", "2026-09-16");
-    const { error } = await client.from("bank_lines").update({ description: "ubah" }).eq("id", lines?.[0].id);
+    const { error } = await client.rpc("mark_bank_cash", { p_line_id: lines?.[0].id });
     expect(error?.message).toContain("locked period");
   });
 
+  // Bank lines change only through functions now; the rule holds even for the service role.
   it("cannot move a bank line out of one", async () => {
-    const client = await userClient("a", "bendahari");
     const { data: lines } = await admin
       .from("bank_lines")
       .select("id")
       .eq("masjid_id", MASJID_A)
       .eq("date", "2026-09-16");
-    const { error } = await client.from("bank_lines").update({ date: OPEN_DATE }).eq("id", lines?.[0].id);
+    const { error } = await admin.from("bank_lines").update({ date: OPEN_DATE }).eq("id", lines?.[0].id);
     expect(error?.message).toContain("locked period");
   });
 
   it("cannot delete a bank line dated in one", async () => {
-    const client = await userClient("a", "bendahari");
     const { data: lines } = await admin
       .from("bank_lines")
       .select("id")
       .eq("masjid_id", MASJID_A)
       .eq("date", "2026-09-16");
-    const { error } = await client.from("bank_lines").delete().eq("id", lines?.[0].id);
+    const { error } = await admin.from("bank_lines").delete().eq("id", lines?.[0].id);
     expect(error?.message).toContain("locked period");
   });
 

@@ -3,13 +3,14 @@ import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/BackLink";
 import { EntryForm } from "@/components/kewangan/EntryForm";
 import { Notice } from "@/components/ui/forms";
-import { todayInMalaysia } from "@/lib/cashbook";
+import { NOTE_MAX, todayInMalaysia } from "@/lib/cashbook";
 import { senToPlain } from "@/lib/money";
 import { can } from "@/lib/permissions";
 import { requireMember } from "@/lib/session";
 import { emailEnabled } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
 import type { EntryValues } from "../actions";
+import { loadBankLine, type BankLineRow } from "../bank/data";
 import { isMonthLocked, loadCategories, loadFunds, TRANSACTION_COLUMNS, type Transaction } from "../data";
 
 export default async function NewEntryPage({ searchParams }: PageProps<"/kewangan/baru">) {
@@ -30,7 +31,27 @@ export default async function NewEntryPage({ searchParams }: PageProps<"/kewanga
     original = (data as Transaction | null) ?? null;
   }
 
-  const initial: EntryValues = original
+  // From an unmatched bank line: the date, amount and direction come from the bank.
+  let bankLine: BankLineRow | null = null;
+  if (!original && typeof params.bank === "string" && /^[0-9a-f-]{36}$/i.test(params.bank)) {
+    const line = await loadBankLine(params.bank);
+    if (line && !line.matched_transaction_id && !line.cash_transfer && !(await isMonthLocked(line.date.slice(0, 7)))) bankLine = line;
+  }
+
+  const initial: EntryValues = bankLine
+    ? {
+        direction: bankLine.amount_sen > 0 ? "in" : "out",
+        date: bankLine.date > today ? today : bankLine.date,
+        fund_id: "",
+        category_id: "",
+        amount: senToPlain(Math.abs(bankLine.amount_sen)),
+        method: "bank_transfer",
+        ref_no: "",
+        note: (bankLine.description ?? "").slice(0, NOTE_MAX),
+        received_from: "",
+        email: "",
+      }
+    : original
     ? {
         direction: original.direction,
         date: (await isMonthLocked(original.date.slice(0, 7))) ? today : original.date,
@@ -47,9 +68,15 @@ export default async function NewEntryPage({ searchParams }: PageProps<"/kewanga
 
   return (
     <>
-      <BackLink href="/kewangan" label={t("back")} />
+      <BackLink href={bankLine ? `/kewangan/bank/${bankLine.id}` : "/kewangan"} label={t("back")} />
       <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
       <p className="mt-1 text-muted">{t("lead")}</p>
+
+      {bankLine ? (
+        <div className="mt-4">
+          <Notice tone="success">{t("fromBank")}</Notice>
+        </div>
+      ) : null}
 
       {original ? (
         <div className="mt-4">
@@ -75,6 +102,7 @@ export default async function NewEntryPage({ searchParams }: PageProps<"/kewanga
             initial={initial}
             today={today}
             canEmail={emailEnabled()}
+            bankLineId={bankLine?.id ?? null}
           />
         </div>
       )}

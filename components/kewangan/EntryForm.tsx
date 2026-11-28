@@ -40,6 +40,7 @@ export function EntryForm({
   initial,
   today,
   canEmail,
+  bankLineId = null,
 }: {
   masjidId: string;
   funds: (Option & { restricted: boolean })[];
@@ -47,6 +48,8 @@ export function EntryForm({
   initial: EntryValues;
   today: string;
   canEmail: boolean;
+  /** The bank line this entry is made from; it is matched to the entry once saved. */
+  bankLineId?: string | null;
 }) {
   const errors = useTranslations("errors");
 
@@ -78,6 +81,7 @@ export function EntryForm({
       categories={categories}
       today={today}
       canEmail={canEmail}
+      bankLineId={bankLineId}
     />
   );
 }
@@ -91,6 +95,7 @@ function EntryFields({
   categories,
   today,
   canEmail,
+  bankLineId,
 }: {
   action: (form: FormData) => void;
   values: EntryValues;
@@ -99,6 +104,7 @@ function EntryFields({
   categories: CategoryOption[];
   today: string;
   canEmail: boolean;
+  bankLineId: string | null;
 }) {
   const t = useTranslations("rekod");
   const k = useTranslations("kewangan");
@@ -133,6 +139,7 @@ function EntryFields({
 
   return (
     <form action={action} className="mt-6 space-y-4">
+      {bankLineId ? <input type="hidden" name="bank_line_id" value={bankLineId} /> : null}
       {error ? <Notice tone="error">{error}</Notice> : null}
 
       <fieldset>

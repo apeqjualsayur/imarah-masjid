@@ -20,6 +20,7 @@ const spec: Record<Capability, string> = {
   "collections.confirm": "YY-Y-",
   "receipts.view": "YYYY-",
   "receipts.share": "YY---",
+  "bank.view": "YY---",
   "bank.match": "-Y---",
   "periods.lock": "Y----",
   "reports.prepare": "YYY--",
@@ -50,15 +51,15 @@ describe("menus", () => {
   const keys = (role: Role) => allowedItems(sidebarItems, role).map((item) => item.key);
 
   it("Pengerusi sees every menu item", () => {
-    expect(keys("pengerusi")).toEqual(["utama", "kewangan", "kariah", "khairat", "laporan", "tetapan"]);
+    expect(keys("pengerusi")).toEqual(["utama", "kewangan", "kariah", "khairat", "derma", "laporan", "tetapan"]);
   });
 
   it("AJK has no reports", () => {
-    expect(keys("ajk")).toEqual(["utama", "kewangan", "kariah", "khairat", "tetapan"]);
+    expect(keys("ajk")).toEqual(["utama", "kewangan", "kariah", "khairat", "derma", "tetapan"]);
   });
 
-  it("Imam sees only the home page and settings", () => {
-    expect(keys("imam")).toEqual(["utama", "tetapan"]);
+  it("Imam sees only the home page, Terima derma and settings", () => {
+    expect(keys("imam")).toEqual(["utama", "derma", "tetapan"]);
     expect(allowedItems(tabItems, "imam").map((item) => item.key)).toEqual(["utama", "lagi"]);
   });
 

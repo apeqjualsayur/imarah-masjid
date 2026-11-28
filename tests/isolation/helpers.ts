@@ -50,6 +50,8 @@ export async function userId(masjid: MasjidKey, role: Role) {
 /** Every table in the database. The coverage test fails if this falls out of date. */
 export const TABLES = [
   "audit_log",
+  "bank_formats",
+  "bank_imports",
   "bank_lines",
   "categories",
   "collections",
