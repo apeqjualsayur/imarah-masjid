@@ -96,10 +96,20 @@ Also (Step 3): `invitations` (masjid_id, email, role, token_hash, invited_by, ex
 - Blind confirmation: the confirmer types their own count; the first figure is hidden in the app until confirmed (the counter sees their own; both figures show after a difference). This is a screen rule; the row is still readable by finance roles through the API.
 - Whoever recounts becomes the counter, so a different person must confirm.
 - On a match the function posts one receipt in the same database transaction: fund and date of the count, category "Kutipan Jumaat" (if it exists and is open), method cash, `created_by` = confirmer, and a receipt number. Confirming again returns `confirmed` and posts nothing (row lock).
-- Receipt numbers (started here, extended to all receipts in Step 8): `RC-<year>-<0001>` per masjid per calendar year of the entry date, from `receipt_counters` locked by the update in the same transaction; never reused, even after a reversal. Only the system writes `transactions.receipt_no` (column-level insert grant excludes it).
+- Receipt numbers (started here, extended to all receipts in Step 8, see below): `RC-<year>-<0001>` per masjid per calendar year of the entry date, from `receipt_counters` locked by the update in the same transaction; never reused, even after a reversal. Only the system writes `transactions.receipt_no` (column-level insert grant excludes it).
 - Idempotency: `client_key` (made on the phone when the form opens) is unique per masjid; sending again, even five at once, returns the first count.
 - Offline: a count made with no signal is kept in that browser's localStorage, per user, shown as "Belum dihantar", and sent on reconnect, on page open or by "Hantar sekarang". Pages are still never cached by the service worker (Step 1 decision), so offline saving works when the count screen was open before the signal dropped.
 - Breakdown: RM100, 50, 20, 10, 5, 1 notes counted by number; coins as one amount (`coins_sen`). The database checks it adds up to the total.
+
+### E-receipt decisions (Step 8)
+- Every new money-in entry that is not a cancellation gets a receipt number from trigger `zz_assign_receipt_no` (runs after the other checks; a refused entry rolls the counter back, so no gaps). Payments and reversals never carry one (check constraint). Collections keep the number `confirm_collection` gives them; same sequence. Entries saved before Step 8 have no number and no receipt (owner decision: only test data existed).
+- `transactions.received_from` (optional donor name, max 100) is printed as "Daripada"; blank prints "—". It is hidden in the audit log like other personal data.
+- Donor email is used once to send through Resend with the PDF attached and is never stored. `log_receipt_emailed(id)` (P, B) writes an `EMAIL` row to the audit log without the address.
+- PDF: A5, drawn with `pdf-lib` on the server (`lib/pdf/receipt.ts`), Plus Jakarta Sans bundled from `lib/pdf/fonts/` (OFL). Always in Malay. SVG logos are drawn to PNG with `@resvg/resvg-wasm`, loaded at run time; nothing native, because the owner's drive D (exFAT) cannot hold the links Next.js makes for native or external packages. A logo that cannot be read prints the initials.
+- Cancelled receipts keep their number; the copy shows a BATAL badge, note and diagonal watermark, and cannot be shared or emailed.
+- Share link: `/r/<id>.<expiry>.<signature>`, HMAC-SHA256 with `RECEIPT_LINK_SECRET`, valid 30 days. The route is public and reads only that one receipt with the service key after checking the signature; a bad or expired link gets a plain Malay page (404/410). WhatsApp share is a `wa.me/?text=` link; the system sends nothing.
+- "Dijana oleh Imarah": always on Asas; paid plans can hide it with `masjids.receipt_hide_credit` (Pengerusi, Tetapan > E-resit).
+- Permissions: view and download P, B, S, AJK (`receipts.view`); share and email P, B (`receipts.share`). The Imam cannot read transactions at all.
 
 ## 6. Rules that never bend
 1. Money in integer sen.

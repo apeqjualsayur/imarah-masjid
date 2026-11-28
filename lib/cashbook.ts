@@ -12,6 +12,7 @@ export const isMethod = (value: unknown): value is Method => METHODS.includes(va
 export const NOTE_MAX = 500;
 export const REF_MAX = 60;
 export const REASON_MAX = 300;
+export const RECEIVED_FROM_MAX = 100;
 export const FUND_NAME_MAX = 60;
 
 export type Entry = {

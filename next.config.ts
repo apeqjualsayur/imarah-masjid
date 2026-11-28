@@ -11,8 +11,9 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "2mb" },
   },
   // lib/prayer-times.ts reads the bundled fallback from disk on the server.
+  // lib/pdf/receipt.ts reads the PDF fonts, lib/receipts.ts the SVG drawer, from disk.
   outputFileTracingIncludes: {
-    "/**": ["./data/prayer-times/**"],
+    "/**": ["./data/prayer-times/**", "./lib/pdf/fonts/**", "./node_modules/@resvg/resvg-wasm/**"],
   },
   turbopack: {
     rules: {

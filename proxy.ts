@@ -9,6 +9,8 @@ const PUBLIC_PREFIXES = [
   "/jemput/",
   "/auth/",
   "/pentadbir/log-masuk",
+  // Shared receipts: checked by their signature, opened by donors without an account.
+  "/r/",
 ];
 
 function isPublic(pathname: string) {

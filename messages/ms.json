@@ -129,7 +129,9 @@
     "logo": "Logo masjid",
     "logoLead": "Muat naik logo untuk sidebar, e-resit dan laporan",
     "funds": "Dana & kategori",
-    "fundsLead": "Tambah, namakan semula atau arkib dana dan kategori"
+    "fundsLead": "Tambah, namakan semula atau arkib dana dan kategori",
+    "receipts": "E-resit",
+    "receiptsLead": "Teks kredit Imarah pada resit"
   },
   "users": {
     "back": "Tetapan",
@@ -279,7 +281,13 @@
     "breakdown_mismatch": "Pecahan wang tidak sama dengan jumlah. Semak semula bilangan setiap not.",
     "needs_recount": "Kiraan ini perlu dikira semula dahulu sebelum boleh disahkan.",
     "collection_closed": "Kiraan ini sudah disahkan atau dibatalkan, jadi tidak boleh diubah.",
-    "offline_not_kept": "Tiada isyarat dan telefon ini tidak dapat menyimpan kiraan. Tulis jumlah di kertas dan cuba lagi apabila ada isyarat."
+    "offline_not_kept": "Tiada isyarat dan telefon ini tidak dapat menyimpan kiraan. Tulis jumlah di kertas dan cuba lagi apabila ada isyarat.",
+    "email_off": "Emel belum disediakan untuk aplikasi ini.",
+    "email_bad": "Alamat emel tidak sah.",
+    "receipt_cancelled": "Resit ini telah dibatalkan dan tidak boleh dihantar.",
+    "email_failed": "Emel tidak dapat dihantar. Sila cuba lagi.",
+    "received_from_too_long": "Nama penderma terlalu panjang (maksimum 100 aksara).",
+    "credit_asas": "Pelan Asas sentiasa menunjukkan \"Dijana oleh Imarah\"."
   },
   "shell": {
     "greeting": "Salam, {name}"
@@ -599,7 +607,10 @@
       "status": "Status",
       "reason": "Sebab pembatalan",
       "posted": "Sah"
-    }
+    },
+    "receiptsLink": "Resit",
+    "emailedOk": "Resit telah dihantar ke emel penderma.",
+    "emailedFailed": "Rekod disimpan, tetapi resit tidak dapat dihantar ke emel. Cuba lagi dari halaman resit."
   },
   "rekod": {
     "back": "Kewangan",
@@ -628,7 +639,11 @@
     "attachment": "Lampiran (pilihan)",
     "attachmentHint": "Gambar resit atau bil (JPG, PNG, WebP) atau PDF, maksimum 5 MB.",
     "saving": "Sedang menyimpan…",
-    "save": "Simpan rekod"
+    "save": "Simpan rekod",
+    "receivedFrom": "Daripada (pilihan)",
+    "receivedFromHint": "Nama penderma seperti dicetak pada resit. Kosongkan jika tidak mahu nama.",
+    "donorEmail": "Emel penderma (pilihan)",
+    "donorEmailHint": "Resit PDF dihantar ke emel ini. Emel tidak disimpan."
   },
   "transaksi": {
     "details": "Butiran rekod",
@@ -661,7 +676,9 @@
     "cancelThenEnter": "Selepas dibatalkan, borang rekod baharu dibuka dengan butiran yang sama supaya anda boleh memasukkan rekod yang betul.",
     "cancelOnly": "Selepas dibatalkan, minta Bendahari memasukkan rekod yang betul.",
     "cancelling": "Sedang membatalkan…",
-    "cancel": "Batalkan rekod"
+    "cancel": "Batalkan rekod",
+    "openReceipt": "Lihat resit",
+    "receivedFrom": "Daripada"
   },
   "dana": {
     "back": "Tetapan",
@@ -688,5 +705,71 @@
     "newExpense": "Kategori bayaran baharu",
     "newCategoryPlaceholder": "Kategori baharu",
     "add": "Tambah"
+  },
+  "resit": {
+    "title": "Resit",
+    "lead": "Setiap terimaan mendapat resit bernombor. Muat turun, kongsi ke WhatsApp atau hantar ke emel.",
+    "search": "Cari no. resit",
+    "searchHint": "Contoh: 0042",
+    "find": "Cari",
+    "clear": "Kosongkan",
+    "count": "{count, plural, =0 {Tiada resit} other {# resit}}",
+    "found": "{count, plural, =0 {Tiada padanan} other {# padanan}}",
+    "empty": "Tiada resit bulan ini.",
+    "noneFound": "Tiada resit dengan nombor itu.",
+    "cancelledBadge": "Dibatalkan",
+    "cancelledLead": "Rekod ini dibatalkan pada {date}. Salinan resit menunjukkan BATAL.",
+    "preview": "Pratonton resit",
+    "pdfTitle": "PDF",
+    "download": "Muat turun PDF",
+    "open": "Buka PDF",
+    "shareTitle": "Kongsi",
+    "shareLead": "Membuka WhatsApp dengan mesej ringkas dan pautan ke resit. Pautan sah selama {days} hari. Sistem tidak menghantar apa-apa mesej.",
+    "whatsapp": "Kongsi ke WhatsApp",
+    "shareOff": "Pautan kongsi belum disediakan untuk aplikasi ini.",
+    "whatsappMessage": "Assalamualaikum. Terima kasih atas sumbangan anda kepada {masjid}. Resit {number} ({amount}): {link}\n\nPautan sah selama {days} hari.",
+    "emailTitle": "Hantar ke emel",
+    "emailLabel": "Emel penderma",
+    "emailHint": "Emel digunakan sekali untuk menghantar dan tidak disimpan.",
+    "emailSend": "Hantar emel",
+    "emailSending": "Sedang menghantar…",
+    "emailSent": "Resit telah dihantar.",
+    "emailOff": "Emel belum disediakan untuk aplikasi ini.",
+    "openEntry": "Lihat rekod dalam lejar"
+  },
+  "resitPdf": {
+    "title": "E-resit sumbangan",
+    "number": "No. resit",
+    "date": "Tarikh",
+    "from": "Daripada",
+    "fund": "Dana",
+    "method": "Kaedah",
+    "total": "Jumlah",
+    "inWords": "Ringgit Malaysia:",
+    "thanks": "Terima kasih. Semoga Allah menerima sedekah anda.",
+    "signature": "Tandatangan Bendahari",
+    "credit": "Dijana oleh Imarah",
+    "cancelled": "BATAL",
+    "cancelledNote": "Resit ini telah dibatalkan dan tidak sah."
+  },
+  "resitKongsi": {
+    "badTitle": "Pautan resit tidak sah",
+    "badBody": "Pautan ini tidak lengkap atau telah diubah. Minta pihak masjid menghantar pautan baharu.",
+    "expiredTitle": "Pautan resit telah tamat tempoh",
+    "expiredBody": "Untuk keselamatan, pautan resit hanya sah untuk tempoh terhad. Minta pihak masjid menghantar pautan baharu."
+  },
+  "resitEmel": {
+    "subject": "Resit {number} daripada {masjid}",
+    "body": "Assalamualaikum,\n\nTerima kasih atas sumbangan anda sebanyak {amount} kepada {masjid}.\n\nResit {number} dilampirkan sebagai PDF.\n\nSemoga Allah menerima sedekah anda."
+  },
+  "resitTetapan": {
+    "title": "E-resit",
+    "lead": "Tetapan untuk resit yang dijana oleh aplikasi.",
+    "creditTitle": "Kredit Imarah",
+    "creditAsas": "Pelan Asas sentiasa menunjukkan \"Dijana oleh Imarah\" di bawah resit. Pelan berbayar boleh menyembunyikannya.",
+    "hideCredit": "Sembunyikan \"Dijana oleh Imarah\" pada resit",
+    "save": "Simpan",
+    "saving": "Sedang menyimpan…",
+    "saved": "Disimpan."
   }
 }

@@ -20,12 +20,13 @@ export type Transaction = {
   reversal_reason: string | null;
   attachment_path: string | null;
   receipt_no: string | null;
+  received_from: string | null;
   created_by: string | null;
   created_at: string;
 };
 
 export const TRANSACTION_COLUMNS =
-  "id, date, fund_id, category_id, amount_sen, direction, method, ref_no, note, reverses_id, reversal_reason, attachment_path, receipt_no, created_by, created_at";
+  "id, date, fund_id, category_id, amount_sen, direction, method, ref_no, note, reverses_id, reversal_reason, attachment_path, receipt_no, received_from, created_by, created_at";
 
 /** All the masjid's funds, open ones first. */
 export const loadFunds = cache(async (): Promise<Fund[]> => {

@@ -4,8 +4,9 @@ import { supabaseUrl } from "./env";
 
 /**
  * Bypasses RLS. Only for the few things no user may do for themselves:
- * creating an invited person's account and checking whether a signed-in user
- * was removed from a masjid. Never pass its results to the browser unchecked.
+ * creating an invited person's account, checking whether a signed-in user
+ * was removed from a masjid, and reading the one receipt a signed share link
+ * names (app/r/[token]). Never pass its results to the browser unchecked.
  */
 export function createAdminClient() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;

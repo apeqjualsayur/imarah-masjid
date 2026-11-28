@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Download, HandCoins, Plus, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, HandCoins, Plus, ReceiptText, Settings2 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Badge, Figure, SignedAmount } from "@/components/kewangan/bits";
 import { Notice } from "@/components/ui/forms";
@@ -43,6 +43,7 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
     return new URLSearchParams(Object.entries(next).filter(([, value]) => value)).toString();
   };
   const savedId = pick(params.disimpan);
+  const emailed = pick(params.emel);
   const filtered = !!(filters.fund || filters.category || filters.direction);
 
   return (
@@ -60,6 +61,15 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
             <HandCoins aria-hidden className="size-4" />
             {t("collectionsLink")}
           </Link>
+          {can(role, "receipts.view") ? (
+            <Link
+              href="/kewangan/resit"
+              className="inline-flex min-h-tap items-center gap-2 rounded-chip border border-border bg-surface px-4 font-semibold text-primary-dark"
+            >
+              <ReceiptText aria-hidden className="size-4" />
+              {t("receiptsLink")}
+            </Link>
+          ) : null}
           {can(role, "funds.manage") ? (
             <Link
               href="/tetapan/dana"
@@ -89,6 +99,8 @@ export default async function KewanganPage({ searchParams }: PageProps<"/kewanga
               {t("view")}
             </Link>
           </Notice>
+          {emailed === "ok" ? <div className="mt-2"><Notice tone="success">{t("emailedOk")}</Notice></div> : null}
+          {emailed === "gagal" ? <div className="mt-2"><Notice tone="error">{t("emailedFailed")}</Notice></div> : null}
         </div>
       ) : null}
 

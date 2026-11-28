@@ -6,6 +6,16 @@ roles: [pengerusi, bendahari, setiausaha, ajk, imam]
 
 # Apa yang baharu
 
+## November 2026: E-resit
+
+- **Nombor resit untuk setiap terimaan.** Setiap wang masuk mendapat nombor seperti RC-2026-0001, dalam urutan yang sama dengan Kutipan Jumaat. Nombor tidak pernah berulang.
+- **Resit PDF** dengan logo masjid, jumlah dalam angka dan perkataan, dan ruang tandatangan Bendahari. Resit yang dibatalkan menunjukkan BATAL.
+- **Kewangan > Resit:** cari mengikut bulan atau nombor, muat turun PDF.
+- **Kongsi ke WhatsApp:** mesej ringkas dengan pautan resit yang sah 30 hari. Penderma tidak perlu akaun.
+- **Emel resit** kepada penderma (jika emel disediakan). Alamat tidak disimpan.
+- **Nama penderma** (pilihan) pada borang terimaan.
+- **Tetapan > E-resit:** pelan berbayar boleh menyembunyikan "Dijana oleh Imarah".
+
 ## November 2026: Kutipan Jumaat
 
 - **Dua orang mengesahkan.** Bendahari atau AJK mengira; seorang lagi (Pengerusi, Bendahari atau AJK) mengira sendiri dan mengesahkan. Tiada siapa boleh mengesahkan kiraan sendiri.

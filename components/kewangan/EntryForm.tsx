@@ -6,7 +6,7 @@ import { ArrowDownLeft, ArrowUpRight, Paperclip } from "lucide-react";
 import { Field, Notice, SelectInput, SubmitButton, TextArea, TextInput } from "@/components/ui/forms";
 import { recordTransaction, type EntryState, type EntryValues } from "@/app/(app)/kewangan/actions";
 import { ATTACHMENT_BUCKET, checkAttachment } from "@/lib/attachment";
-import { METHODS, NOTE_MAX, REF_MAX } from "@/lib/cashbook";
+import { METHODS, NOTE_MAX, RECEIVED_FROM_MAX, REF_MAX } from "@/lib/cashbook";
 import { createClient } from "@/lib/supabase/browser";
 
 type Option = { id: string; name: string };
@@ -23,6 +23,8 @@ const valuesOf = (form: FormData): EntryValues => {
     method: get("method"),
     ref_no: get("ref_no"),
     note: get("note"),
+    received_from: get("received_from"),
+    email: get("email"),
   };
 };
 
@@ -37,12 +39,14 @@ export function EntryForm({
   categories,
   initial,
   today,
+  canEmail,
 }: {
   masjidId: string;
   funds: (Option & { restricted: boolean })[];
   categories: CategoryOption[];
   initial: EntryValues;
   today: string;
+  canEmail: boolean;
 }) {
   const errors = useTranslations("errors");
 
@@ -73,6 +77,7 @@ export function EntryForm({
       funds={funds}
       categories={categories}
       today={today}
+      canEmail={canEmail}
     />
   );
 }
@@ -85,6 +90,7 @@ function EntryFields({
   funds,
   categories,
   today,
+  canEmail,
 }: {
   action: (form: FormData) => void;
   values: EntryValues;
@@ -92,6 +98,7 @@ function EntryFields({
   funds: (Option & { restricted: boolean })[];
   categories: CategoryOption[];
   today: string;
+  canEmail: boolean;
 }) {
   const t = useTranslations("rekod");
   const k = useTranslations("kewangan");
@@ -187,6 +194,19 @@ function EntryFields({
           <TextInput name="ref_no" maxLength={REF_MAX} autoComplete="off" defaultValue={values.ref_no} />
         </Field>
       </div>
+
+      {direction === "in" ? (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label={t("receivedFrom")} hint={t("receivedFromHint")}>
+            <TextInput name="received_from" maxLength={RECEIVED_FROM_MAX} autoComplete="off" defaultValue={values.received_from} />
+          </Field>
+          {canEmail ? (
+            <Field label={t("donorEmail")} hint={t("donorEmailHint")}>
+              <TextInput name="email" type="email" autoComplete="off" defaultValue={values.email} />
+            </Field>
+          ) : null}
+        </div>
+      ) : null}
 
       <Field label={t("note")} hint={t("noteHint")}>
         <TextArea name="note" rows={2} maxLength={NOTE_MAX} defaultValue={values.note} />

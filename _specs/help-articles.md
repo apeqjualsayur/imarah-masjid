@@ -10,6 +10,7 @@ Files: `content/help/ms/<slug>.md` and `content/help/en/<slug>.md`. Every articl
 | Mendaftar isi rumah dan import CSV | Setiausaha |
 | Merekod resit dan bayaran | Bendahari |
 | Kutipan Jumaat: dua orang mengesahkan | AJK |
+| E-resit: muat turun, kongsi dan emel | Pengerusi, Bendahari, Setiausaha, AJK |
 | Yuran khairat dan tunggakan | Setiausaha, Bendahari |
 | Penyesuaian bank | Bendahari |
 | Mengunci bulan | Pengerusi |

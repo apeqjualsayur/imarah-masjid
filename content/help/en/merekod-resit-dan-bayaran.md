@@ -16,9 +16,13 @@ The cash book (**Finance**) keeps every ringgit that comes in and goes out, by f
 4. Check the **Date**. Today's date is filled in for you. Dates after today are not allowed: record the entry when the money is actually received or paid (for example, a post-dated cheque is recorded when it clears).
 5. Choose the **Fund** and **Category**. The category list follows Receive or Pay.
 6. Choose the **Method**: Cash, Bank transfer, DuitNow or Cheque.
-7. Fill in the **Reference** (receipt no., cheque no. or bank reference) and a **Note** if needed.
-8. If you have one, attach a photo of the receipt or bill (JPG, PNG, WebP) or a PDF, up to 5 MB.
-9. Press **Save entry**.
+7. Fill in the **Reference** (receipt no., cheque no. or bank reference) if needed.
+8. For receipts only: fill in **Received from (optional)** for the donor's name on the receipt, and **Donor email (optional)** to send them the receipt PDF. The address is not saved.
+9. Fill in a **Note** if needed.
+10. If you have one, attach a photo of the receipt or bill (JPG, PNG, WebP) or a PDF, up to 5 MB.
+11. Press **Save entry**.
+
+Every receipt of money gets its own receipt number (for example **RC-2026-0001**). See [E-receipts](/bantuan/e-resit) to download, share and send receipts.
 
 **Important:** an entry cannot be changed or deleted once saved. This protects the masjid and the treasurer: every figure can be traced.
 

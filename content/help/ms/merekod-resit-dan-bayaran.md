@@ -16,9 +16,13 @@ Buku tunai (**Kewangan**) menyimpan setiap ringgit yang masuk dan keluar, mengik
 4. Semak **Tarikh**. Tarikh hari ini diisi secara automatik. Tarikh selepas hari ini tidak dibenarkan: rekodkan apabila wang sebenarnya diterima atau dibayar (contoh: cek bertarikh kemudian direkod apabila dijelaskan).
 5. Pilih **Dana** dan **Kategori**. Senarai kategori berubah mengikut Terima atau Bayar.
 6. Pilih **Kaedah**: Tunai, Pindahan bank, DuitNow atau Cek.
-7. Isi **Rujukan** (no. resit, no. cek atau rujukan bank) dan **Catatan** jika perlu.
-8. Jika ada, lampirkan gambar resit atau bil (JPG, PNG, WebP) atau PDF, maksimum 5 MB.
-9. Tekan **Simpan rekod**.
+7. Isi **Rujukan** (no. resit, no. cek atau rujukan bank) jika perlu.
+8. Untuk terimaan sahaja: isi **Daripada (pilihan)** untuk nama penderma pada resit, dan **Emel penderma (pilihan)** untuk menghantar resit PDF kepadanya. Emel tidak disimpan.
+9. Isi **Catatan** jika perlu.
+10. Jika ada, lampirkan gambar resit atau bil (JPG, PNG, WebP) atau PDF, maksimum 5 MB.
+11. Tekan **Simpan rekod**.
+
+Setiap terimaan mendapat nombor resit sendiri (contoh **RC-2026-0001**). Lihat [E-resit](/bantuan/e-resit) untuk memuat turun, berkongsi dan menghantar resit.
 
 **Penting:** rekod tidak boleh diubah atau dipadam selepas disimpan. Ini melindungi masjid dan bendahari: setiap angka boleh dijejaki.
 

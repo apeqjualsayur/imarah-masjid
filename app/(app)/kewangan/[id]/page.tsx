@@ -79,7 +79,20 @@ export default async function TransactionPage({ params }: PageProps<"/kewangan/[
           {entry.receipt_no ? (
             <>
               <dt className="text-sm text-muted">{t("receiptNo")}</dt>
-              <dd className="font-semibold">{entry.receipt_no}</dd>
+              <dd className="flex flex-wrap items-center gap-3">
+                <span className="font-semibold">{entry.receipt_no}</span>
+                {can(role, "receipts.view") ? (
+                  <Link href={`/kewangan/resit/${entry.id}`} className="inline-flex min-h-tap items-center font-semibold text-primary-dark underline underline-offset-4">
+                    {t("openReceipt")}
+                  </Link>
+                ) : null}
+              </dd>
+            </>
+          ) : null}
+          {entry.received_from ? (
+            <>
+              <dt className="text-sm text-muted">{t("receivedFrom")}</dt>
+              <dd>{entry.received_from}</dd>
             </>
           ) : null}
           <dt className="text-sm text-muted">{t("ref")}</dt>

@@ -3,9 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ATTACHMENT_BUCKET, checkAttachment } from "@/lib/attachment";
-import { cashbookError, isIsoDate, isMethod, NOTE_MAX, REASON_MAX, REF_MAX, todayInMalaysia } from "@/lib/cashbook";
+import { cashbookError, isIsoDate, isMethod, NOTE_MAX, REASON_MAX, RECEIVED_FROM_MAX, REF_MAX, todayInMalaysia } from "@/lib/cashbook";
+import { looksLikeEmail, normaliseEmail } from "@/lib/invitations";
 import { parseRinggit } from "@/lib/money";
 import { can } from "@/lib/permissions";
+import { sendReceiptEmail } from "@/lib/receipt-email";
 import { requireMember } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,6 +20,8 @@ export type EntryValues = {
   method: string;
   ref_no: string;
   note: string;
+  received_from: string;
+  email: string;
 };
 
 /** `values` puts what was typed back in the form after a refusal. `n` remounts it. */
@@ -36,6 +40,8 @@ function readValues(form: FormData): EntryValues {
     method: text(form, "method"),
     ref_no: text(form, "ref_no"),
     note: text(form, "note"),
+    received_from: text(form, "received_from").replace(/\s+/g, " "),
+    email: text(form, "email"),
   };
 }
 
@@ -75,6 +81,10 @@ export async function recordTransaction(prev: EntryState, form: FormData): Promi
   if (!isMethod(values.method)) return refuse("method_missing");
   if (values.ref_no.length > REF_MAX) return refuse("ref_too_long");
   if (values.note.length > NOTE_MAX) return refuse("note_too_long");
+  // Only receipts have a donor; a payment ignores what may be left in the fields.
+  const isReceipt = values.direction === "in";
+  if (isReceipt && values.received_from.length > RECEIVED_FROM_MAX) return refuse("received_from_too_long");
+  if (isReceipt && values.email && !looksLikeEmail(normaliseEmail(values.email))) return refuse("email_bad");
 
   const supabase = await createClient();
   const attachment = text(form, "attachment_path") || null;
@@ -95,6 +105,7 @@ export async function recordTransaction(prev: EntryState, form: FormData): Promi
       ref_no: values.ref_no || null,
       note: values.note || null,
       attachment_path: attachment,
+      received_from: (isReceipt && values.received_from) || null,
     })
     .select("id")
     .single();
@@ -105,9 +116,13 @@ export async function recordTransaction(prev: EntryState, form: FormData): Promi
     return refuse(cashbookError(error));
   }
 
+  // The entry is saved whatever happens to the email; the ledger says if it was not sent.
+  let emailed = "";
+  if (isReceipt && values.email) emailed = (await sendReceiptEmail(data.id, values.email)) ? "&emel=gagal" : "&emel=ok";
+
   revalidatePath("/kewangan");
   revalidatePath("/");
-  redirect(`/kewangan?bulan=${values.date.slice(0, 7)}&disimpan=${data.id}`);
+  redirect(`/kewangan?bulan=${values.date.slice(0, 7)}&disimpan=${data.id}${emailed}`);
 }
 
 export type ReverseState = { error?: string };

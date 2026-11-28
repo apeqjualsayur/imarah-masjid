@@ -7,6 +7,7 @@ import { todayInMalaysia } from "@/lib/cashbook";
 import { senToPlain } from "@/lib/money";
 import { can } from "@/lib/permissions";
 import { requireMember } from "@/lib/session";
+import { emailEnabled } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
 import type { EntryValues } from "../actions";
 import { isMonthLocked, loadCategories, loadFunds, TRANSACTION_COLUMNS, type Transaction } from "../data";
@@ -39,8 +40,10 @@ export default async function NewEntryPage({ searchParams }: PageProps<"/kewanga
         method: original.method,
         ref_no: original.ref_no ?? "",
         note: original.note ?? "",
+        received_from: original.received_from ?? "",
+        email: "",
       }
-    : { direction: "", date: today, fund_id: "", category_id: "", amount: "", method: "cash", ref_no: "", note: "" };
+    : { direction: "", date: today, fund_id: "", category_id: "", amount: "", method: "cash", ref_no: "", note: "", received_from: "", email: "" };
 
   return (
     <>
@@ -71,6 +74,7 @@ export default async function NewEntryPage({ searchParams }: PageProps<"/kewanga
             categories={openCategories}
             initial={initial}
             today={today}
+            canEmail={emailEnabled()}
           />
         </div>
       )}
